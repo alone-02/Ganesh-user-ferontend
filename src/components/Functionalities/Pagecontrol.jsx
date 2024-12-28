@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "./pagecontrol.css";
+//import "./pagecontrol.css";
 
 function Pagecontrol() {
   let [page, setPage] = useState(1);

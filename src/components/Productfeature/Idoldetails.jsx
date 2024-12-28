@@ -3,9 +3,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { IdolContext } from "../ContextApi/IdolContext";
 import IdolList from "../Container/IdolList";
-import "./featureIdol.css";
+//import "./featureIdol.css";
 import { useNavigate } from "react-router-dom";
-
 
 function Idoldetails() {
   const navigate = useNavigate();
@@ -26,7 +25,8 @@ function Idoldetails() {
       if (!userId || !authToken) {
         console.error("User is not authenticated. Missing token or userId.");
         alert("Please Sign In");
-        navigate( `/login`);
+        navigate(`/login`);
+        return;
       }
 
       const response = await axios.post(
@@ -41,10 +41,11 @@ function Idoldetails() {
           },
         }
       );
+
       if (response.status === 200) {
         alert(response.data.message);
       }
-
+      const result = response.data;
       console.log(result);
     } catch (err) {
       console.error(err.response.data.message);
@@ -65,6 +66,10 @@ function Idoldetails() {
           },
         }
       );
+      if (response.status === 200) {
+        alert(response.data.message);
+      }
+
       const result = response.data;
       console.log(result);
     } catch (err) {
@@ -74,60 +79,50 @@ function Idoldetails() {
 
   return (
     <>
-      <div className="featureContainer">
-        <div className="feature">
+      <div className="flex flex-col items-center space-y-6 px-4 py-6 bg-gray-100">
+        <div className="featflex flex-col md:flex-row bg-white shadow-md rounded-lg overflow-hidden max-w-4xlure">
           <img
-            className="featureImg"
-            style={{
-              borderRadius: "15px",
-              border: "none",
-              outline: "none",
-              width: "640px",
-              height: "500px",
-            }}
             src={thumbnail}
+            alt={title}
+            className="w-full md:w-1/2 object-cover"
+            style={{ maxHeight: "500px" }}
           />
-        </div>
-        <div className="Detailsdiv">
-          <div className="featuredetails">
-            <div className="featureTitle">
-              <textarea
-                className="desc_textarea"
-                rows={2}
-                value={title}
-                readOnly
-                onClick={() => feature(id)}
+          <div className="p-6 flex flex-col space-y-4">
+            <h2 className="text-2xl font-bold text-gray-800">{title}</h2>
+            <p className="text-lg text-gray-600">Price: ₹{price}</p>
+            <div className="flex space-x-4">
+              <button
+                onClick={() => addToOrder(id)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
               >
-                {title}
-              </textarea>
+                Book Now
+              </button>
+              <button
+                onClick={() => addToCart(id)}
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+              >
+                Add to Cart
+              </button>
             </div>
-            <div className="price_div">
-              <p className="price_para">Price : ₹{price}</p>
-            </div>
-          </div>
-          <div className="buybtn_div">
-            <button className="buybtn" onClick={() => addToOrder(id)}>
-              Book Now
-            </button>
-            <button className="buybtn" onClick={() => addToCart(id)}>
-              Cart
-            </button>
           </div>
         </div>
-      </div>
-      <div className="similardiv">
-        <h2>Similar Idols</h2>
-      </div>
-      <div className="feautureList">
-        {idolList.map((idol) => (
-          <IdolList
-            key={idol._id}
-            id={idol._id}
-            title={idol.title}
-            thumbnail={idol.thumbnail.image_url}
-            price={idol.price}
-          />
-        ))}
+
+        <div className="w-full max-w-4xl">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+            Similar Idols
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {idolList.map((idol) => (
+              <IdolList
+                key={idol._id}
+                id={idol._id}
+                title={idol.title}
+                thumbnail={idol.thumbnail.image_url}
+                price={idol.price}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </>
   );

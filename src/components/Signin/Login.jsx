@@ -151,7 +151,9 @@ function Login() {
         </Link>
 
         <button
-          className="w-full p-3 rounded-md text-white bg-blue-600 hover:bg-blue-700"
+          className={`w-full p-3 rounded-md text-white ${
+            loading ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-700"
+          }`}
           type="submit"
           disabled={loading}
         >

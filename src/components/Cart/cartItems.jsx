@@ -1,6 +1,7 @@
 import React from "react";
 
 function CartItems({ id, title, thumbnail, price, quantity }) {
+  
   const handleQuantityChange = (index, quantity) => {
     const updatedItems = [...items];
     updatedItems[index].quantity = quantity;
