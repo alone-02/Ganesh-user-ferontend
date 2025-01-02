@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function Sidebar() {
   return (
     <>
-      <div className="fixed top-0 left-0 w-64 h-full bg-gray-800 text-white shadow-lg z-50">
+      <div className="fixed top-10 my-6 left-0 w-64 h-full bg-gray-800 text-white shadow-lg z-50">
         <div className="flex flex-col p-4 space-y-4">
           <Link
             to="/account"

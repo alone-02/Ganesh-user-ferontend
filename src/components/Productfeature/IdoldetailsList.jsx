@@ -36,7 +36,7 @@ function IdoldetailsList({ id, thumbnail, title, price, description }) {
         </h3>
         <p className="text-gray-600 text-sm">Price: ₹{price}</p>
         <button
-          onClick={() => player(id)}
+          onClick={() => featureIdeol(id)}
           className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
         >
           View Details

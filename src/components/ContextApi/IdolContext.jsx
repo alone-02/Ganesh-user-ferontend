@@ -13,7 +13,7 @@ function IdolProvider({ children }) {
   });
 
   useEffect(() => {
-    async function fetchIdol() {
+    const fetchIdol = async () => {
       try {
         const response = await axios.get("/api/products");
         const result = response.data;
@@ -21,7 +21,7 @@ function IdolProvider({ children }) {
       } catch (err) {
         console.log(err);
       }
-    }
+    };
     fetchIdol();
   }, []);
 

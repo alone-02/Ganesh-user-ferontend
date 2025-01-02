@@ -22,7 +22,7 @@ function AccountDropdown() {
     <div className="relative">
       <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-50 toggleoption_div">
         <Link
-          to="/account"
+          to="/profile"
           className="block px-4 py-2 text-gray-700 hover:bg-blue-500 hover:text-white rounded-t-md"
         >
           Profile

@@ -2,12 +2,12 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
+
 import { AuthContext } from "../ContextApi/AuthContext";
 import AccountDropdown from "./AccountDropdown";
-
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import Sidebar from "./Sidebar";
 //import "./Navbar.css";
 
@@ -17,7 +17,7 @@ const Navbar = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const { signIn } = useContext(AuthContext);
-  console.log(signIn);
+ // console.log(signIn);
 
   const isHome = location.pathname === "/";
   const isLogin = location.pathname === "/login";
@@ -31,7 +31,7 @@ const Navbar = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
-    console.log("Dropdown toggled");
+    console.log("Dropdown toggled :", !isDropdownOpen);
   };
 
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -52,25 +52,26 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="bg-gray-800">
-      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+    <nav className="bg-gray-900">
+      <div className="max-w-8xl px-2 sm:px-6 lg:px-4">
         <div className="flex items-center justify-between h-16">
           {/*!isHome &&*/}
-          <div className="relative">
+          <div className="relative flex items-center">
             <MenuIcon
               onClick={toggleSidebar}
-              className="inline-block mx-2 text-white text-2xl cursor-pointer"
+              className="inline-block mr-8 text-white cursor-pointer"
+              style={{fontSize:"2.2rem"}}
             />
 
             {isSidebarOpen && <Sidebar />}
-          </div>
+          
 
           <div className="flex items-center">
             <img className="h-8" src="Logo.webp" alt="Logo" />
-
             <span className="text-white text-2xl font-semibold ml-2">Ganesh Museum</span>
           </div>
-          <div className="hidden md:flex space-x-4">
+          </div>
+          <div className="hidden md:flex space-x-6">
             <Link
               to="/"
               className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
@@ -95,12 +96,13 @@ const Navbar = () => {
             <ShoppingCartIcon
               className="text-white hover:text-blue-500 cursor-pointer"
               onClick={cart}
+              style={{fontSize:"2.2rem"}}
             />
 
             {!signIn ? (
               <Link
                 to={isLogin ? "/signup" : "/login"}
-                className="bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium">
+                className="bg-gray-600 text-white hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium">
                 {isLogin ? (
                   <>
                     Sign Up <LogoutIcon />{" "}
@@ -115,7 +117,8 @@ const Navbar = () => {
               <div className="relative">
                 <AccountCircleOutlinedIcon
                   onClick={toggleDropdown}
-                  className="text-white cursor-pointer"
+                  className="text-white cursor-pointer text-lg"
+                  style={{fontSize:"2.2rem"}}
                 />
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-md">

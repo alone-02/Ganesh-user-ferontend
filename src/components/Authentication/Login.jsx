@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../ContextApi/AuthContext";
+import Dialog from "../404ErrorPage/Dialog";
 
 //import "./login.css";
 //import LoginIcon from "@mui/icons-material/Login";
@@ -89,6 +90,7 @@ function Login() {
 
         setSignIn(true);
 
+        //return <h2>Hiii</h2>;
         navigate("/explore");
       }
     } catch (err) {
@@ -109,11 +111,8 @@ function Login() {
         method="post"
         action="./login"
         onSubmit={login}
-        className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md"
-      >
-        <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
-          Log In
-        </h2>
+        className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Log In</h2>
         <div className="mb-4">
           <input
             className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -124,9 +123,7 @@ function Login() {
             onChange={dataInput}
             required
           />
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-          )}
+          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
         </div>
 
         <div className="mb-4">
@@ -145,8 +142,7 @@ function Login() {
         </div>
         <Link
           to="/signup"
-          className="block text-blue-500 text-sm mb-4 text-center hover:underline"
-        >
+          className="block text-blue-500 text-sm mb-4 text-center hover:underline">
           Don't have an account? Sign up
         </Link>
 
@@ -155,8 +151,7 @@ function Login() {
             loading ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-700"
           }`}
           type="submit"
-          disabled={loading}
-        >
+          disabled={loading}>
           {loading ? "Logging In" : "Log In"}
         </button>
       </form>

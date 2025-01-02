@@ -131,8 +131,9 @@ function Signup() {
           type="text"
           placeholder="Enter Name"
           name="name"
-          value={signUpData.name}
+          
           onChange={handleChange}
+          value={signUpData.name}
           required
         />
         {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
