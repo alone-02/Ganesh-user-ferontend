@@ -18,7 +18,7 @@ function Idoldetails() {
   useEffect(() => {
     const fetchAddress = async () => {
       try {
-        const response = await axios.get(`/api/products/${pid}`);
+        const response = await axios.get(`https://ganesh-ecom-back-end.onrender.com/api/products/${pid}`);
 
         const { id, title, thumbnail, price } = response.data;
         //console.log(title);
@@ -52,7 +52,7 @@ function Idoldetails() {
       }
 
       const response = await axios.post(
-        `/api/products/cart/add_to_cart`,
+        `https://ganesh-ecom-back-end.onrender.com/api/products/cart/add_to_cart`,
         {
           cartItem: { productId: productId, quantity: 1 },
           user: userId,
@@ -75,7 +75,7 @@ function Idoldetails() {
   };
 
   const addToOrder = async (productId) => {
-    navigate(`/address/${productId}`);
+    navigate(`https://ganesh-ecom-back-end.onrender.com/address/${productId}`);
     //return <PlaceOrder pId={productId}/>;
   };
 

@@ -49,7 +49,7 @@ function CheckAddress() {
         //console.log(response.data);
         if (response.status === 200) {
           if (Object.keys(response.data.address).length === 0) {
-            navigate("/add_address");
+            navigate("/add_address/${pid}");
           }
           console.log(Object.keys(response.data.address).length === 0);
           console.log(response.data);
