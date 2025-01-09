@@ -75,7 +75,8 @@ function Idoldetails() {
   };
 
   const addToOrder = async (productId) => {
-    navigate(`https://ganesh-ecom-back-end.onrender.com/address/${productId}`);
+    console.log(productId);
+    navigate(`/address/${productId}`);
     //return <PlaceOrder pId={productId}/>;
   };
 
