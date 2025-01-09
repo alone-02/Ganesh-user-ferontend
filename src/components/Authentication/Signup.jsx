@@ -85,7 +85,7 @@ function Signup() {
     setLoading(true);
 
     try {
-      const response = await axios.post("/api/users/signup", signUpData);
+      const response = await axios.post("https://ganesh-ecom-back-end.onrender.com/api/users/signup", signUpData);
 
       if (response.status === 201) {
         console.log(response.data);

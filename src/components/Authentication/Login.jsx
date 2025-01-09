@@ -65,7 +65,7 @@ function Login() {
     //console.log("Login");
     setLoading(true);
     try {
-      const response = await axios.post("/api/users/login", loginData);
+      const response = await axios.post("https://ganesh-ecom-back-end.onrender.com/api/users/login", loginData);
 
       if (response.status === 200) {
         // console.log("User Found");

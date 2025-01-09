@@ -23,7 +23,7 @@ function Cart() {
     async function fetchCart() {
       try {
         const response = await axios.get(
-          `/api/products/cart/${userId}`,
+          `https://ganesh-ecom-back-end.onrender.com/api/products/cart/${userId}`,
           {},
           {
             headers: {

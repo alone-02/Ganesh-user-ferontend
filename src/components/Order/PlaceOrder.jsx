@@ -16,7 +16,7 @@ const PlaceOrder = () => {
   useEffect(() => {
     const fetchAddress = async () => {
       try {
-        const response = await axios.get(`/api/products/${pid}`);
+        const response = await axios.get(`https://ganesh-ecom-back-end.onrender.com/api/products/${pid}`);
 
         const { id, title, thumbnail, price } = response.data;
         //console.log(title);
@@ -43,7 +43,7 @@ const PlaceOrder = () => {
   const placeToOrder = async (productId) => {
     try {
       const response = await axios.post(
-        `http://localhost:2000/api/products/orders/place_order`,
+        `https://ganesh-ecom-back-end.onrender.com/api/products/orders/place_order`,
         {
           orderItem: [{ productId: productId, quantity: 1 }],
           user: userId,

@@ -18,7 +18,7 @@ function UserProfile() {
     const fetchProfile = async () => {
       try {
         const response = await axios.get(
-          `api/users/login/userlist/${userId}`,
+          `https://ganesh-ecom-back-end.onrender.com/api/users/login/userlist/${userId}`,
           {},
           {
             headers: {

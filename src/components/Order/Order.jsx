@@ -19,7 +19,7 @@ function Order() {
   useEffect(() => {
     async function fetchOrders() {
       try {
-        const response = await axios.get(`/api/products/orders/${userId}`, {
+        const response = await axios.get(`https://ganesh-ecom-back-end.onrender.com/api/products/orders/${userId}`, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },

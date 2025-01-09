@@ -15,7 +15,7 @@ function IdolProvider({ children }) {
   useEffect(() => {
     const fetchIdol = async () => {
       try {
-        const response = await axios.get("/api/products");
+        const response = await axios.get("https://ganesh-ecom-back-end.onrender.com/api/products");
         const result = response.data;
         setIdolList(result);
       } catch (err) {

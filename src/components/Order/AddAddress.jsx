@@ -38,7 +38,7 @@ function AddAddress() {
     async function fetchAddress() {
       try {
         const response = await axios.post(
-          `/api/users/signup/address/${userId}`,
+          `https://ganesh-ecom-back-end.onrender.com/api/users/signup/address/${userId}`,
 
           {
             headers: {
