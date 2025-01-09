@@ -6,7 +6,7 @@ import path from "path";
 export default defineConfig({
   server:{
     proxy:{
-      "/api": 'https://ganesh-ecom-back-end.onrender.com/api/'
+      "/api": 'http://localhost:2000'
     }
   },
   plugins: [react()]
