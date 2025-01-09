@@ -4,7 +4,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { IdolContext } from "../ContextApi/IdolContext";
 import IdolCard from "../Container/IdolCard";
-
+const apiUrl = import.meta.env.VITE_BACK_END_URL;
 function Idoldetails() {
   const navigate = useNavigate();
   const { pid } = useParams();
@@ -18,7 +18,7 @@ function Idoldetails() {
   useEffect(() => {
     const fetchAddress = async () => {
       try {
-        const response = await axios.get(`https://ganesh-ecom-back-end.onrender.com/api/products/${pid}`);
+        const response = await axios.get(`${apiUrl}/api/products/${pid}`);
 
         const { id, title, thumbnail, price } = response.data;
         //console.log(title);
@@ -52,7 +52,7 @@ function Idoldetails() {
       }
 
       const response = await axios.post(
-        `https://ganesh-ecom-back-end.onrender.com/api/products/cart/add_to_cart`,
+        `${apiUrl}/api/products/cart/add_to_cart`,
         {
           cartItem: { productId: productId, quantity: 1 },
           user: userId,
@@ -61,6 +61,7 @@ function Idoldetails() {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
+          credentials: "include", 
         }
       );
 

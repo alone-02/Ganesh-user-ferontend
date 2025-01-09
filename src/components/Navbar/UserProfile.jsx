@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import ErrorPage from "../404ErrorPage/ErrorPage";
+const apiUrl = import.meta.env.VITE_BACK_END_URL;
 
 function UserProfile() {
   const [profile, setProfile] = useState(null);
@@ -18,7 +19,7 @@ function UserProfile() {
     const fetchProfile = async () => {
       try {
         const response = await axios.get(
-          `https://ganesh-ecom-back-end.onrender.com/api/users/login/userlist/${userId}`,
+          `${apiUrl}/api/users/login/userlist/${userId}`,
           {},
           {
             headers: {

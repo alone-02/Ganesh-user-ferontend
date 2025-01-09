@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../ContextApi/AuthContext";
 import Dialog from "../404ErrorPage/Dialog";
-
+const apiUrl = import.meta.env.VITE_BACK_END_URL;
 //import "./login.css";
 //import LoginIcon from "@mui/icons-material/Login";
 
@@ -65,7 +65,7 @@ function Login() {
     //console.log("Login");
     setLoading(true);
     try {
-      const response = await axios.post("https://ganesh-ecom-back-end.onrender.com/api/users/login", loginData);
+      const response = await axios.post(`${apiUrl}/api/users/login`, loginData);
 
       if (response.status === 200) {
         // console.log("User Found");

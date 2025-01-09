@@ -5,7 +5,7 @@ import axios from "axios";
 import OrderItems from "./OrderItems";
 import Dialog from "../404ErrorPage/Dialog";
 import ErrorPage from "../404ErrorPage/ErrorPage";
-
+const apiUrl = import.meta.env.VITE_BACK_END_URL;
 function CheckAddress() {
   const navigate = useNavigate();
   const {pid} = useParams();
@@ -38,12 +38,13 @@ function CheckAddress() {
     async function fetchAddress() {
       try {
         const response = await axios.post(
-          `https://ganesh-ecom-back-end.onrender.com/api/users/signup/address/${userId}`,
+          `${apiUrl}/api/users/signup/address/${userId}`,
 
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
             },
+            credentials: "include", 
           }
         );
         //console.log(response.data);

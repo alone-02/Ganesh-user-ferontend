@@ -5,6 +5,7 @@ import IdolList from "../Container/IdolCard";
 import CartItems from "./cartItems";
 import { Link, useNavigate } from "react-router-dom";
 import ErrorPage from "../404ErrorPage/ErrorPage";
+const apiUrl = import.meta.env.VITE_BACK_END_URL;
 
 function Cart() {
   const navigate = useNavigate();
@@ -23,12 +24,13 @@ function Cart() {
     async function fetchCart() {
       try {
         const response = await axios.get(
-          `https://ganesh-ecom-back-end.onrender.com/api/products/cart/${userId}`,
+          `${apiUrl}/api/products/cart/${userId}`,
           {},
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
             },
+            credentials: "include", 
           }
         );
         // console.log(response.data);

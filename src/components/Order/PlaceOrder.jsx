@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
+const apiUrl = import.meta.env.VITE_BACK_END_URL;
 
 const PlaceOrder = () => {
   const { pid } = useParams();
@@ -16,7 +17,7 @@ const PlaceOrder = () => {
   useEffect(() => {
     const fetchAddress = async () => {
       try {
-        const response = await axios.get(`https://ganesh-ecom-back-end.onrender.com/api/products/${pid}`);
+        const response = await axios.get(`${apiUrl}/api/products/${pid}`);
 
         const { id, title, thumbnail, price } = response.data;
         //console.log(title);
@@ -43,7 +44,7 @@ const PlaceOrder = () => {
   const placeToOrder = async (productId) => {
     try {
       const response = await axios.post(
-        `https://ganesh-ecom-back-end.onrender.com/api/products/orders/place_order`,
+        `${apiUrl}/api/products/orders/place_order`,
         {
           orderItem: [{ productId: productId, quantity: 1 }],
           user: userId,
@@ -52,6 +53,7 @@ const PlaceOrder = () => {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
+          credentials: "include", 
         }
       );
 

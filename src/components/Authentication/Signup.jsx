@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 //import "./signup.css";
+const apiUrl = import.meta.env.VITE_BACK_END_URL;
 
 function Signup() {
   const navigate = useNavigate();
@@ -85,7 +86,7 @@ function Signup() {
     setLoading(true);
 
     try {
-      const response = await axios.post("/api/users/signup", signUpData);
+      const response = await axios.post(`${apiUrl}/api/users/signup`, signUpData);
 
       if (response.status === 201) {
         console.log(response.data);

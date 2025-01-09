@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import OrderItems from "./OrderItems";
 import { Dialog } from "@mui/material";
+const apiUrl = import.meta.env.VITE_BACK_END_URL;
 
 function Order() {
   const [orderDetails, setOrderDetails] = useState([]);
@@ -19,10 +20,11 @@ function Order() {
   useEffect(() => {
     async function fetchOrders() {
       try {
-        const response = await axios.get(`https://ganesh-ecom-back-end.onrender.com/api/products/orders/${userId}`, {
+        const response = await axios.get(`${apiUrl}/api/products/orders/${userId}`, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
+          credentials: "include", 
         });
 
         if (response.status === 200) {

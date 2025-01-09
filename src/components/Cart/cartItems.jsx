@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+const apiUrl = import.meta.env.VITE_BACK_END_URL;
 
 function CartItems({ id, title, thumbnail, price, quantity }) {
   const [cartQuantity, setCartQuantity] = useState(quantity);
