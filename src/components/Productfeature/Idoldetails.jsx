@@ -3,8 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { IdolContext } from "../ContextApi/IdolContext";
-import IdolCard from "../Container/IdolCard";
+import { Spinner } from "reactstrap"; // Importing a spinner component
 const apiUrl = import.meta.env.VITE_BACK_END_URL;
+
 function Idoldetails() {
   const navigate = useNavigate();
   const { pid } = useParams();
@@ -13,22 +14,19 @@ function Idoldetails() {
 
   const userId = Cookies.get("userId");
   const authToken = Cookies.get("authToken");
-  //console.log("id :",userId, "token :",authToken);
 
   useEffect(() => {
     const fetchAddress = async () => {
       try {
         const response = await axios.get(`${apiUrl}/api/products/${pid}`);
-
         const { id, title, thumbnail, price } = response.data;
-        //console.log(title);
+
         setIdol({
           id: id,
           title: title,
           thumbnail: thumbnail.image_url,
           price: price,
         });
-        //console.log(idol);
       } catch (err) {
         console.log(err);
       }
@@ -37,7 +35,11 @@ function Idoldetails() {
   }, [pid]);
 
   if (!idol) {
-    return <p>Loading idol details...</p>;
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Spinner color="primary" /> {/* Using spinner for loading state */}
+      </div>
+    );
   }
 
   const { id, title, thumbnail, price } = idol;
@@ -45,7 +47,6 @@ function Idoldetails() {
   const addToCart = async (productId) => {
     try {
       if (!userId || !authToken) {
-        console.error("User is not authenticated. Missing token or userId.");
         alert("Please Sign In");
         navigate(`/login`);
         return;
@@ -61,36 +62,31 @@ function Idoldetails() {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
-          credentials: "include", 
         }
       );
 
       if (response.status === 200) {
         alert(response.data.message);
       }
-      const result = response.data;
-      console.log(result);
     } catch (err) {
       console.error(err.response.data.message);
     }
   };
 
   const addToOrder = async (productId) => {
-    console.log(productId);
     navigate(`/address/${productId}`);
-    //return <PlaceOrder pId={productId}/>;
+  };
+
+  const featureIdol = (id) => {
+    navigate(`/idoldetails/${id}`);
   };
 
   return (
     <>
       <div className="flex flex-col items-center space-y-6 px-4 py-6 bg-gray-100">
-        <div className="flex flex-col md:flex-row bg-white shadow-md rounded-lg overflow-hidden max-w-4xlure">
-          <img
-            src={thumbnail}
-            alt={title}
-            className="w-full md:w-1/2 object-cover"
-            style={{ maxHeight: "500px" }}
-          />
+        {/* Idol Details Section */}
+        <div className="flex flex-col md:flex-row bg-white shadow-md rounded-lg overflow-hidden max-w-4xl">
+          <img src={thumbnail} alt={title} className="w-full md:w-1/2 object-cover" />
           <div className="p-6 flex flex-col space-y-4">
             <h2 className="text-2xl font-bold text-gray-800">{title}</h2>
             <p className="text-lg text-gray-600">Price: ₹ {price}</p>
@@ -109,17 +105,29 @@ function Idoldetails() {
           </div>
         </div>
 
-        <div className="w-full max-w-4xl">
+        {/* Similar Idols Slider */}
+        <div className="w-full max-w-6xl max-h-6xl px-4">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Similar Idols</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+          <div className="flex overflow-x-auto space-x-6">
             {idolList.map((idol) => (
-              <IdolCard
+              <div
                 key={idol._id}
-                id={idol._id}
-                title={idol.title}
-                thumbnail={idol.thumbnail.image_url}
-                price={idol.price}
-              />
+                className="flex-shrink-0 w-60 bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition">
+                <img
+                  src={idol.thumbnail.image_url}
+                  alt="thumbnail"
+                  onClick={() => featureIdol(idol.id)}
+                  className="w-full h-60 object-cover cursor-pointer"
+                />
+                <div className="p-4 flex flex-col space-y-2 text-center">
+                  <h3
+                    onClick={() => featureIdol(idol.id)}
+                    className="text-lg font-semibold text-gray-800 cursor-pointer hover:text-blue-600">
+                    {idol.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm">Price: ₹{idol.price}</p>
+                </div>
+              </div>
             ))}
           </div>
         </div>

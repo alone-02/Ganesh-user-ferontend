@@ -65,7 +65,7 @@ function Login() {
     //console.log("Login");
     setLoading(true);
     try {
-      const response = await axios.post(`${apiUrl}/api/users/login`, loginData);
+      const response = await axios.post(`${apiUrl}/api/users/login/authenticate`, loginData);
 
       if (response.status === 200) {
         // console.log("User Found");
