@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const LandingPage = () => {
+function Home () {
  
   return (
     <div>
@@ -204,4 +204,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage;
+export default Home;
