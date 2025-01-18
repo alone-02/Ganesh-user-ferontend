@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 const apiUrl = import.meta.env.VITE_BACK_END_URL;
 
 const PlaceOrder = () => {
   const { pid } = useParams();
-  const [cartItems, setCartItems] = useState();
+  const navigate = useNavigate();
 
-  const [idol, setIdol] = useState(null);
+  const [idol, setIdol] = useState();
 
   const userId = Cookies.get("userId");
   const authToken = Cookies.get("authToken");
   //console.log("id :",userId, "token :",authToken);
 
   useEffect(() => {
-    const fetchAddress = async () => {
+    const fetchProduct = async () => {
       try {
         const response = await axios.get(`${apiUrl}/api/products/${pid}`);
 
@@ -32,7 +32,7 @@ const PlaceOrder = () => {
         console.log(err);
       }
     };
-    fetchAddress();
+    fetchProduct();
   }, [pid]);
 
   if (!idol) {
@@ -53,13 +53,14 @@ const PlaceOrder = () => {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
-          credentials: "include", 
+          credentials: "include",
         }
       );
 
       if (response.status === 200) {
         console.log(response.data);
         alert(response.data.message);
+        navigate(`/orders`);
       }
     } catch (err) {
       console.log(err);
@@ -70,20 +71,24 @@ const PlaceOrder = () => {
   const shipping = 5.0;
   const taxes = 5.52;
 
-  const total = price + shipping + taxes;
+  total = price + shipping + taxes;
 
   return (
     <div className="max-w-2xl mx-auto p-4">
       <h2 className="text-xl font-bold mb-4">Order Summary</h2>
       <div className="space-y-4">
-        <div key={id} className="flex items-center border rounded-lg p-4 shadow-sm">
-          <img src={thumbnail} alt={title} className="w-16 h-16 object-cover rounded" />
+        <div key={idol.id} className="flex items-center border rounded-lg p-4 shadow-sm">
+          <img
+            src={idol.thumbnail}
+            alt={idol.title}
+            className="w-16 h-16 object-cover rounded"
+          />
           <div className="ml-4 flex-1">
-            <h3 className="font-medium">{title}</h3>
+            <h3 className="font-medium">{idol.title}</h3>
             <p className="text-sm text-gray-600">
               {"orange"} • {"2ft"}
             </p>
-            <p className="text-sm font-medium">${price}</p>
+            <p className="text-sm font-medium">${idol.price}</p>
           </div>
           <div className="flex items-center space-x-2">
             <select
@@ -97,14 +102,14 @@ const PlaceOrder = () => {
               ))}
             </select>
             <button
-              onClick={() => handleRemoveItem(id)}
+              onClick={() => handleRemoveItem(idol.id)}
               className="text-red-500 hover:text-red-700">
               Remove
             </button>
           </div>
         </div>
+        
       </div>
-
       <div className="mt-6 border-t pt-4 space-y-2">
         <div className="flex justify-between">
           <span className="text-gray-600">Subtotal</span>

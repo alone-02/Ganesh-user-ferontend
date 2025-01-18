@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import OrderItems from "./OrderItems";
 import { Dialog } from "@mui/material";
+import NoOrder from "./NoOrder";
 const apiUrl = import.meta.env.VITE_BACK_END_URL;
 
 function Order() {
@@ -24,11 +25,12 @@ function Order() {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
-          credentials: "include", 
+          credentials: "include",
         });
 
         if (response.status === 200) {
           setOrderDetails(response.data);
+          console.log(response.data);
         }
       } catch (err) {
         console.error("Error fetching orders:", err);
@@ -39,12 +41,7 @@ function Order() {
   }, [userId, authToken]);
 
   if (orderDetails.length === 0) {
-    return (
-      <div className="text-center mt-20">
-        <h2 className="text-2xl font-bold">No orders found</h2>
-        <p className="text-gray-600">You haven't placed any orders yet.</p>
-      </div>
-    );
+    return <NoOrder />;
   }
 
   const shippingCharge = 10.0;
@@ -63,7 +60,8 @@ function Order() {
           <div key={order._id} className="mb-8 border-b pb-4">
             <div className="mb-4">
               <p className="text-sm text-gray-500">
-                Order number {order._id} &middot; {new Date(order.orderDate).toLocaleDateString()}
+                Order number {order._id} &middot;{" "}
+                {new Date(order.orderDate).toLocaleDateString()}
               </p>
             </div>
 
@@ -75,6 +73,7 @@ function Order() {
                 thumbnail={item.product.thumbnail.image_url}
                 price={item.product.price}
                 quantity={item.quantity}
+                shipAddress={order.shipAddress}
               />
             ))}
 
@@ -84,7 +83,6 @@ function Order() {
                 <p className="text-sm text-gray-700">{order.shipAddress}</p>
                 <p className="text-sm text-gray-700">{order.city}</p>
                 <p className="text-sm text-gray-700">{order.country}</p>
-                <p className="text-sm text-gray-700">Phone: {order.phone}</p>
               </div>
 
               <div>
@@ -115,10 +113,6 @@ function Order() {
             </div>
           </div>
         ))}
-
-        <button className="bg-blue-600 text-white py-2 px-4 rounded-lg w-full">
-          View All Invoices
-        </button>
       </div>
     </div>
   );

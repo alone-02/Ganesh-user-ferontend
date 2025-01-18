@@ -1,4 +1,5 @@
 function OrderItems({id,title, thumbnail,price,status,shipAddress, city,country,phone,}) {
+  console.log(shipAddress.email)
   return (
     <>
       <div className="flex items-center gap-6 mb-8">
@@ -27,7 +28,7 @@ function OrderItems({id,title, thumbnail,price,status,shipAddress, city,country,
         </div>
         <div>
           <h4 className="font-semibold text-sm">Shipping updates</h4>
-          <p className="text-sm text-gray-700">f•••@example.com</p>
+          <p className="text-sm text-gray-700">{""}</p>
           <p className="text-sm text-gray-700">+91 {phone}</p>
           <a href="#" className="text-sm text-blue-600 hover:underline">
             Edit

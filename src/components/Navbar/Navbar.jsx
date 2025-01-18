@@ -17,7 +17,7 @@ const Navbar = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const { signIn } = useContext(AuthContext);
- // console.log(signIn);
+  // console.log(signIn);
 
   const isHome = location.pathname === "/";
   const isLogin = location.pathname === "/login";
@@ -40,17 +40,6 @@ const Navbar = () => {
     setSidebarOpen(!isSidebarOpen);
   };
 
-  useEffect(() => {
-    const handleToggle = (event) => {
-      if (!event.target.closest(".toggleoption_div")) {
-        setDropdownOpen(false);
-        setSidebarOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleToggle);
-    return () => document.removeEventListener("mousedown", handleToggle);
-  }, []);
-
   return (
     <nav className="bg-gray-900">
       <div className="max-w-8xl px-2 sm:px-6 lg:px-4">
@@ -60,16 +49,17 @@ const Navbar = () => {
             <MenuIcon
               onClick={toggleSidebar}
               className="inline-block mr-8 text-white cursor-pointer"
-              style={{fontSize:"2.2rem"}}
+              style={{ fontSize: "2.1rem" }}
             />
 
             {isSidebarOpen && <Sidebar />}
-          
 
-          <div className="flex items-center">
-            <img className="h-8" src="Logo.webp" alt="Logo" />
-            <span className="text-white text-2xl font-semibold ml-2">Ganesh Museum</span>
-          </div>
+            <div className="flex items-center">
+              <img className="h-8" src="Logo.webp" alt="Logo" />
+              <span className="text-white text-2xl font-semibold ml-2">
+                Ganesh Museum
+              </span>
+            </div>
           </div>
           <div className="hidden md:flex space-x-6">
             <Link
@@ -77,26 +67,27 @@ const Navbar = () => {
               className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
               Home
             </Link>
+
             <Link
-              to="/about"
-              className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-              About Us
-            </Link>
-            <Link
-              to="/gallery"
+              to="/explore"
               className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
               Gallery
             </Link>
             <Link
-              to="/contact"
+              to="/contact_us"
               className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
               Contact Us
+            </Link>
+            <Link
+              to="/about_us"
+              className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+              About Us
             </Link>
 
             <ShoppingCartIcon
               className="text-white hover:text-blue-500 cursor-pointer"
               onClick={cart}
-              style={{fontSize:"2.2rem"}}
+              style={{ fontSize: "2.2rem" }}
             />
 
             {!signIn ? (
@@ -118,7 +109,7 @@ const Navbar = () => {
                 <AccountCircleOutlinedIcon
                   onClick={toggleDropdown}
                   className="text-white cursor-pointer text-lg"
-                  style={{fontSize:"2.2rem"}}
+                  style={{ fontSize: "2.2rem" }}
                 />
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-md">

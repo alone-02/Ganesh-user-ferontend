@@ -16,10 +16,16 @@ import Idoldetails from "./components/Productfeature/Idoldetails.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 //import Sidebar from "./components/Navbar/Sidebar.jsx";
 import "./index.css";
-import UserProfile from "./components/Navbar/UserProfile.jsx";
+//import UserProfile from "./components/User/UserProfile.jsx";
 import AddAddress from "./components/Order/AddAddress.jsx";
 import CheckAddress from "./components/Order/CheckAddress.jsx";
 import PlaceOrder from "./components/Order/PlaceOrder.jsx";
+import CustomForm from "./components/CustomForm/CustomForm.jsx";
+import AboutUs from "./components/NavbarPages/AboutUs.jsx";
+import ContactUs from "./components/NavbarPages/ContactUs.jsx";
+import User from "./components/User/User.jsx";
+import SavedAddress from "./components/User/SavedAddress.jsx";
+import PersonelInfo from "./components/User/PersonelInfo.jsx";
 
 function AppContent() {
   const location = useLocation();
@@ -40,10 +46,22 @@ function AppContent() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/orders" element={<Order />} />
-          <Route path="/profile" element={<UserProfile />} />
+
+          <Route path="/profile/*" element={<User />}>
+            <Route path="" element={<PersonelInfo />} />
+            <Route path="info" element={<PersonelInfo />} />
+            <Route path="saved_addresses" element={<SavedAddress />} />
+          </Route>
+
           <Route path="/address/:pid" element={<CheckAddress />} />
+          <Route path="/address" element={<CheckAddress />} />
           <Route path="/add_address/:pid" element={<AddAddress />} />
+          <Route path="/add_address" element={<AddAddress />} />
           <Route path="/place_order/:pid" element={<PlaceOrder />} />
+          <Route path="/place_order" element={<PlaceOrder />} />
+          <Route path="/custom" element={<CustomForm />} />
+          <Route path="/about_us" element={<AboutUs />} />
+          <Route path="/contact_us" element={<ContactUs />} />
         </Routes>
       </div>
       <Footer />

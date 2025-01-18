@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../ContextApi/AuthContext";
 import Dialog from "../404ErrorPage/Dialog";
+import SigninPopUp from "../404ErrorPage/SigninPopUp";
 const apiUrl = import.meta.env.VITE_BACK_END_URL;
 //import "./login.css";
 //import LoginIcon from "@mui/icons-material/Login";
@@ -65,7 +66,10 @@ function Login() {
     //console.log("Login");
     setLoading(true);
     try {
-      const response = await axios.post(`${apiUrl}/api/users/login/authenticate`, loginData);
+      const response = await axios.post(
+        `${apiUrl}/api/users/login/authenticate`,
+        loginData
+      );
 
       if (response.status === 200) {
         // console.log("User Found");
@@ -90,7 +94,6 @@ function Login() {
 
         setSignIn(true);
 
-        //return <h2>Hiii</h2>;
         navigate("/explore");
       }
     } catch (err) {

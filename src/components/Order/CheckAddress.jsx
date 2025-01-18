@@ -50,7 +50,10 @@ function CheckAddress() {
         //console.log(response.data);
         if (response.status === 200) {
           if (Object.keys(response.data.address).length === 0) {
-            navigate("/add_address/${pid}");
+            if(!pid){
+              return  navigate(`/add_address`);
+            }
+            navigate(`/add_address/${pid}`);
           }
           console.log(Object.keys(response.data.address).length === 0);
           console.log(response.data);
@@ -64,6 +67,7 @@ function CheckAddress() {
   }, []);
 
   const handleEdit = () => {
+    
     navigate(`/add_address/${pid}`);
   };
 
@@ -72,70 +76,90 @@ function CheckAddress() {
   };
 
   const handleContinue = () => {
+    if(!pid){
+      return navigate(`/place_order`);
+    }
     navigate(`/place_order/${pid}`);
   };
 
 
 
   return (
-    <div className="bg-gray-50 min-h-screen p-8">
-      <div className="max-w-xl mx-auto bg-white shadow-lg rounded-lg p-6">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-lg font-semibold text-gray-700">Saved Address</h2>
-          <button
-            onClick={handleEdit}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-            Edit
-          </button>
+    <div className="bg-gray-50 min-h-screen py-12 px-8">
+    <div className="max-w-xl mx-auto bg-white shadow-md rounded-lg overflow-hidden">
+      {/* Header */}
+      <div className="flex justify-between items-center bg-blue-50 px-6 py-4 border-b border-gray-200">
+        <h2 className="text-xl font-semibold text-gray-800">Saved Address</h2>
+        <button
+          onClick={handleEdit}
+          className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition duration-200">
+          Edit
+        </button>
+      </div>
+  
+      {/* Address Details */}
+      <div className="px-6 py-4 space-y-4 text-gray-700">
+        <div>
+          <span className="block font-semibold text-gray-800">Name:</span>
+          <p className="text-gray-600">{addressDetails.firstName + " " + addressDetails.lastName}</p>
         </div>
-
-        {/* Address Details */}
-        <div className="space-y-4 text-gray-600">
+        <div>
+          <span className="block font-semibold text-gray-800">Email:</span>
+          <p className="text-gray-600">{addressDetails.email}</p>
+        </div>
+        <div>
+          <span className="block font-semibold text-gray-800">Phone:</span>
+          <p className="text-gray-600">{addressDetails.phone}</p>
+        </div>
+        <div>
+          <span className="block font-semibold text-gray-800">Street:</span>
+          <p className="text-gray-600">{addressDetails.address1}</p>
+        </div>
+        <div className="grid grid-cols-2 gap-4">
           <div>
-            <span className="font-medium">Name:</span>{" "}
-            {addressDetails.firstName + " " + addressDetails.lastName}
+            <span className="block font-semibold text-gray-800">City:</span>
+            <p className="text-gray-600">{addressDetails.city}</p>
           </div>
           <div>
-            <span className="font-medium">Email:</span> {addressDetails.email}
+            <span className="block font-semibold text-gray-800">State:</span>
+            <p className="text-gray-600">{addressDetails.state}</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <span className="block font-semibold text-gray-800">Postal Code:</span>
+            <p className="text-gray-600">{addressDetails.zip}</p>
           </div>
           <div>
-            <span className="font-medium">Phone:</span> {addressDetails.phone}
-          </div>
-          <div>
-            <span className="font-medium">Street:</span> {addressDetails.address1}
-          </div>
-          <div>
-            <span className="font-medium">City:</span> {addressDetails.city}
-          </div>
-          <div>
-            <span className="font-medium">State:</span> {addressDetails.state}
-          </div>
-          <div>
-            <span className="font-medium">Postal Code:</span> {addressDetails.zip}
-          </div>
-          <div>
-            <span className="font-medium">Country:</span> {addressDetails.country}
+            <span className="block font-semibold text-gray-800">Country:</span>
+            <p className="text-gray-600">{addressDetails.country}</p>
           </div>
         </div>
       </div>
-      <div className="flex items-end justify-end space-x-5 h-16">
+  
+      {/* Footer Buttons */}
+      <div className="flex justify-end gap-4 bg-gray-100 px-6 py-4 border-t border-gray-200">
         <button
           type="reset"
           onClick={handleCancel}
-          className="w-2xl py-2 px-6 bg-gray-100 text-black rounded-md shadow-sm hover:bg-red-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          className="px-6 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-md hover:bg-red-500 hover:text-white transition duration-200">
           Cancel
         </button>
-
         <button
           type="submit"
           disabled={loading}
           onClick={handleContinue}
-          className="w-2xl py-2 px-6 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          className={`px-6 py-2 text-sm font-medium rounded-md shadow-sm transition duration-200 ${
+            loading
+              ? "bg-blue-400 text-gray-200 cursor-not-allowed"
+              : "bg-blue-600 text-white hover:bg-blue-700"
+          }`}>
           {!loading ? "Submit" : "Saving..."}
         </button>
       </div>
     </div>
+  </div>
+  
   );
 
   /*

@@ -5,11 +5,18 @@ import IdolList from "../Container/IdolCard";
 import CartItems from "./cartItems";
 import { Link, useNavigate } from "react-router-dom";
 import ErrorPage from "../404ErrorPage/ErrorPage";
+import LoadingSpinner from "../404ErrorPage/LoadingSpinner";
 const apiUrl = import.meta.env.VITE_BACK_END_URL;
 
 function Cart() {
   const navigate = useNavigate();
   const [cart, setCart] = useState(null);
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => setLoading(false), 3000);
+  }, []);
 
   const userId = Cookies.get("userId");
   const authToken = Cookies.get("authToken");
@@ -30,7 +37,7 @@ function Cart() {
             headers: {
               Authorization: `Bearer ${authToken}`,
             },
-            credentials: "include", 
+            credentials: "include",
           }
         );
         // console.log(response.data);
@@ -47,7 +54,7 @@ function Cart() {
   }, []);
 
   if (!cart) {
-    return <h1>Loading...</h1>;
+    return <LoadingSpinner message="Loading idols......"/>;
   }
 
   if (cart.cartItems.length === 0) {
@@ -65,63 +72,67 @@ function Cart() {
   };
 
   const handleCheckout = () => {
-    navigate("/")
+    navigate("/address");
   };
 
   return (
     <div className="bg-gray-50 min-h-screen p-8">
-      <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-lg p-6">
-        <h1 className="text-2xl font-semibold border-b pb-4 mb-6">Shopping Cart</h1>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 rounded-lg ">
-            {cart.cartItems.map((item) => (
-              <CartItems
-                key={item._id}
-                id={item._id}
-                title={item.product.title}
-                thumbnail={item.product.thumbnail.image_url}
-                price={item.product.price}
-                quantity={item.quantity}
-              />
-            ))}
-          </div>
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-lg p-6">
+          <h1 className="text-2xl font-semibold border-b pb-4 mb-6">Shopping Cart</h1>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 rounded-lg ">
+              {cart.cartItems.map((item) => (
+                <CartItems
+                  key={item._id}
+                  id={item._id}
+                  title={item.product.title}
+                  thumbnail={item.product.thumbnail.image_url}
+                  price={item.product.price}
+                  quantity={item.quantity}
+                />
+              ))}
+            </div>
 
-          <div className="bg-gray-50 p-6 rounded-lg shadow-md">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">Order Summary</h2>
-            <div className="flex justify-between py-2 text-gray-700">
-              <p>Subtotal</p>
-              <p>₹{cart.totalPrice}</p>
+            <div className="bg-gray-50 p-6 rounded-lg shadow-md">
+              <h2 className="text-lg font-medium text-gray-900 mb-4">Order Summary</h2>
+              <div className="flex justify-between py-2 text-gray-700">
+                <p>Subtotal</p>
+                <p>₹{cart.totalPrice}</p>
+              </div>
+              <div className="flex justify-between py-2 text-gray-700">
+                <p>
+                  Shipping estimate
+                  <span className="ml-1 text-gray-400 cursor-pointer" title="Flat rate">
+                    ?
+                  </span>
+                </p>
+                <p>₹{shippingCharge.toFixed(2)}</p>
+              </div>
+              <div className="flex justify-between py-2 text-gray-700">
+                <p>
+                  Tax estimate
+                  <span className="ml-1 text-gray-400 cursor-pointer" title="8.4%">
+                    ?
+                  </span>
+                </p>
+                <p>₹{taxCharge.toFixed(2)}</p>
+              </div>
+              <div className="flex justify-between py-2 font-bold text-gray-900">
+                <p>Order Total</p>
+                <p>₹ {calculateTotal(cart.totalPrice)}</p>
+              </div>
+              <button
+                onClick={handleCheckout}
+                className="w-full bg-indigo-600 text-white py-2 rounded-md mt-4 hover:bg-indigo-700">
+                Checkout
+              </button>
             </div>
-            <div className="flex justify-between py-2 text-gray-700">
-              <p>
-                Shipping estimate
-                <span className="ml-1 text-gray-400 cursor-pointer" title="Flat rate">
-                  ?
-                </span>
-              </p>
-              <p>₹{shippingCharge.toFixed(2)}</p>
-            </div>
-            <div className="flex justify-between py-2 text-gray-700">
-              <p>
-                Tax estimate
-                <span className="ml-1 text-gray-400 cursor-pointer" title="8.4%">
-                  ?
-                </span>
-              </p>
-              <p>₹{taxCharge.toFixed(2)}</p>
-            </div>
-            <div className="flex justify-between py-2 font-bold text-gray-900">
-              <p>Order Total</p>
-              <p>₹ {calculateTotal(cart.totalPrice)}</p>
-            </div>
-            <button
-              onClick={handleCheckout}
-              className="w-full bg-indigo-600 text-white py-2 rounded-md mt-4 hover:bg-indigo-700">
-              Checkout
-            </button>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

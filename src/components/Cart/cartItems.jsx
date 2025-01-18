@@ -1,19 +1,33 @@
 import React, { useState } from "react";
+import axios from "axios";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 const apiUrl = import.meta.env.VITE_BACK_END_URL;
 
 function CartItems({ id, title, thumbnail, price, quantity }) {
   const [cartQuantity, setCartQuantity] = useState(quantity);
 
-  
-
-  const updateQuantity = (event) => {
+  const updateQuantity = async (event) => {
     console.log(event.target.name, " , ", event.target.value);
     const { name, value } = event.target;
-    if(cartQuantity)
-    name === "plus"
-      ? setCartQuantity(cartQuantity + 1)
-      : setCartQuantity(cartQuantity - 1);
+    if (cartQuantity)
+      name === "plus"
+        ? setCartQuantity(cartQuantity + 1)
+        : setCartQuantity(cartQuantity - 1);
+
+    const response = await axios.put(
+      `${apiUrl}/api/products/cart/${userId}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        credentials: "include",
+      }
+    );
+    // console.log(response.data);
+    if (response.status === 200) {
+      setCart(response.data);
+    }
   };
 
   return (
