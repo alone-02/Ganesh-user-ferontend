@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { IdolContext } from "../ContextApi/IdolContext";
-import { Spinner } from "reactstrap"; // Importing a spinner component
+import { Spinner } from "reactstrap";
 const apiUrl = import.meta.env.VITE_BACK_END_URL;
 
 function Idoldetails() {
@@ -37,7 +37,7 @@ function Idoldetails() {
   if (!idol) {
     return (
       <div className="flex items-center justify-center h-full">
-        <Spinner color="primary" /> {/* Using spinner for loading state */}
+        <Spinner color="primary" />
       </div>
     );
   }
@@ -84,7 +84,6 @@ function Idoldetails() {
   return (
     <>
       <div className="flex flex-col items-center space-y-6 px-4 py-6 bg-gray-100">
-        {/* Idol Details Section */}
         <div className="flex flex-col md:flex-row bg-white shadow-md rounded-lg overflow-hidden max-w-4xl">
           <img src={thumbnail} alt={title} className="w-full md:w-1/2 object-cover" />
           <div className="p-6 flex flex-col space-y-4">
@@ -105,7 +104,6 @@ function Idoldetails() {
           </div>
         </div>
 
-        {/* Similar Idols Slider */}
         <div className="w-full max-w-6xl max-h-6xl px-4">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Similar Idols</h2>
           <div className="flex overflow-x-auto space-x-6">

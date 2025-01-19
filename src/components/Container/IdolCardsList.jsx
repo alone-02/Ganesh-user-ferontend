@@ -10,6 +10,9 @@ function IdolCardsList() {
   useEffect(() => {
     setTimeout(() => setLoading(false), 3000);
   }, []);
+  if(!idolList){
+    setLoading(true);
+  }
 
   return (
     <div className="bg-white">
