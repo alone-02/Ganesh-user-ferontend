@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { IdolContext } from "../ContextApi/IdolContext";
-import { Spinner } from "reactstrap";
+import LoadingSpinner from "../404ErrorPage/LoadingSpinner";
 const apiUrl = import.meta.env.VITE_BACK_END_URL;
 
 function Idoldetails() {
@@ -11,6 +11,8 @@ function Idoldetails() {
   const { pid } = useParams();
   const { idolList } = useContext(IdolContext);
   const [idol, setIdol] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const userId = Cookies.get("userId");
   const authToken = Cookies.get("authToken");
@@ -28,21 +30,14 @@ function Idoldetails() {
           price: price,
         });
       } catch (err) {
-        console.log(err);
+        console.error("Error fetching idol details:", err);
+        setError(true);
+      } finally {
+        setLoading(false);
       }
     };
     fetchAddress();
   }, [pid]);
-
-  if (!idol) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <Spinner color="primary" />
-      </div>
-    );
-  }
-
-  const { id, title, thumbnail, price } = idol;
 
   const addToCart = async (productId) => {
     try {
@@ -69,7 +64,7 @@ function Idoldetails() {
         alert(response.data.message);
       }
     } catch (err) {
-      console.error(err.response.data.message);
+      console.error("Error adding to cart:", err.response?.data?.message || err.message);
     }
   };
 
@@ -81,56 +76,68 @@ function Idoldetails() {
     navigate(`/idoldetails/${id}`);
   };
 
-  return (
-    <>
-      <div className="flex flex-col items-center space-y-6 px-4 py-6 bg-gray-100">
-        <div className="flex flex-col md:flex-row bg-white shadow-md rounded-lg overflow-hidden max-w-4xl">
-          <img src={thumbnail} alt={title} className="w-full md:w-1/2 object-cover" />
-          <div className="p-6 flex flex-col space-y-4">
-            <h2 className="text-2xl font-bold text-gray-800">{title}</h2>
-            <p className="text-lg text-gray-600">Price: ₹ {price}</p>
-            <div className="flex space-x-4">
-              <button
-                onClick={() => addToOrder(id)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-                Book Now
-              </button>
-              <button
-                onClick={() => addToCart(id)}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
-                Add to Cart
-              </button>
-            </div>
-          </div>
-        </div>
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
-        <div className="w-full max-w-6xl max-h-6xl px-4">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Similar Idols</h2>
-          <div className="flex overflow-x-auto space-x-6">
-            {idolList.map((idol) => (
-              <div
-                key={idol._id}
-                className="flex-shrink-0 w-60 bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition">
-                <img
-                  src={idol.thumbnail.image_url}
-                  alt="thumbnail"
-                  onClick={() => featureIdol(idol.id)}
-                  className="w-full h-60 object-cover cursor-pointer"
-                />
-                <div className="p-4 flex flex-col space-y-2 text-center">
-                  <h3
-                    onClick={() => featureIdol(idol.id)}
-                    className="text-lg font-semibold text-gray-800 cursor-pointer hover:text-blue-600">
-                    {idol.title}
-                  </h3>
-                  <p className="text-gray-600 text-sm">Price: ₹{idol.price}</p>
-                </div>
-              </div>
-            ))}
+  if (error || !idol) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-red-500 text-lg">Failed to load idol details. Please try again later.</p>
+      </div>
+    );
+  }
+
+  const { id, title, thumbnail, price } = idol;
+
+  return (
+    <div className="flex flex-col items-center space-y-6 px-4 py-6 bg-gray-100">
+      <div className="flex flex-col md:flex-row bg-white shadow-md rounded-lg overflow-hidden max-w-4xl">
+        <img src={thumbnail} alt={title} className="w-full md:w-1/2 object-cover" />
+        <div className="p-6 flex flex-col space-y-4">
+          <h2 className="text-2xl font-bold text-gray-800">{title}</h2>
+          <p className="text-lg text-gray-600">Price: ₹ {price}</p>
+          <div className="flex space-x-4">
+            <button
+              onClick={() => addToOrder(id)}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+              Book Now
+            </button>
+            <button
+              onClick={() => addToCart(id)}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+              Add to Cart
+            </button>
           </div>
         </div>
       </div>
-    </>
+
+      <div className="w-full max-w-6xl max-h-6xl px-4">
+        <h2 className="text-xl font-semibold text-gray-800 mb-4">Similar Idols</h2>
+        <div className="flex overflow-x-auto space-x-6">
+          {idolList?.map((idol) => (
+            <div
+              key={idol._id}
+              className="flex-shrink-0 w-60 bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition">
+              <img
+                src={idol.thumbnail?.image_url}
+                alt="thumbnail"
+                onClick={() => featureIdol(idol.id)}
+                className="w-full h-60 object-cover cursor-pointer"
+              />
+              <div className="p-4 flex flex-col space-y-2 text-center">
+                <h3
+                  onClick={() => featureIdol(idol.id)}
+                  className="text-lg font-semibold text-gray-800 cursor-pointer hover:text-blue-600">
+                  {idol.title}
+                </h3>
+                <p className="text-gray-600 text-sm">Price: ₹{idol.price}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 

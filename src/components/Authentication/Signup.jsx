@@ -57,13 +57,7 @@ function Signup() {
       confirmPasswordError = "Passwords do not match.";
     }
 
-    if (
-      nameError ||
-      emailError ||
-      phoneError ||
-      passwordError ||
-      confirmPasswordError
-    ) {
+    if (nameError || emailError || phoneError || passwordError || confirmPasswordError) {
       setErrors({
         name: nameError,
         email: emailError,
@@ -117,94 +111,131 @@ function Signup() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <form
-        className="w-full max-w-md bg-white p-8 shadow-lg rounded-lg"
-        method="post"
-        onSubmit={signup}
-      >
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-          Sign Up!
+    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+        <h2 className="mt-10 text-center text-2xl font-bold tracking-tight text-gray-900">
+          Sign up for an account
         </h2>
+      </div>
 
-        <input
-          className="w-full p-3 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          type="text"
-          placeholder="Enter Name"
-          name="name"
-          
-          onChange={handleChange}
-          value={signUpData.name}
-          required
-        />
-        {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <form className="space-y-6" method="post" onSubmit={signup}>
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-900">
+              Name
+            </label>
+            <div className="mt-2">
+              <input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="Enter Name"
+                value={signUpData.name}
+                onChange={handleChange}
+                required
+                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600 sm:text-sm"
+              />
+            </div>
+            {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+          </div>
 
-        <input
-          className="w-full p-3 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          type="email"
-          placeholder="Enter Email Address"
-          name="email"
-          value={signUpData.email}
-          onChange={handleChange}
-          required
-        />
-        {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-900">
+              Email Address
+            </label>
+            <div className="mt-2">
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Enter Email Address"
+                value={signUpData.email}
+                onChange={handleChange}
+                required
+                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600 sm:text-sm"
+              />
+            </div>
+            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+          </div>
 
-        <input
-          className="w-full p-3 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          type="tel"
-          placeholder="Enter Mobile No."
-          name="phone"
-          value={signUpData.phone}
-          onChange={handleChange}
-          required
-        />
-        {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
+          <div>
+            <label htmlFor="phone" className="block text-sm font-medium text-gray-900">
+              Mobile Number
+            </label>
+            <div className="mt-2">
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                placeholder="Enter Mobile No."
+                value={signUpData.phone}
+                onChange={handleChange}
+                required
+                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600 sm:text-sm"
+              />
+            </div>
+            {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
+          </div>
 
-        <input
-          className="w-full p-3 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          type="password"
-          placeholder="Enter Password"
-          name="password"
-          value={signUpData.password}
-          onChange={handleChange}
-          required
-        />
-        {errors.password && (
-          <p className="text-red-500 text-sm">{errors.password}</p>
-        )}
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-900">
+              Password
+            </label>
+            <div className="mt-2">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Enter Password"
+                value={signUpData.password}
+                onChange={handleChange}
+                required
+                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600 sm:text-sm"
+              />
+            </div>
+            {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+          </div>
 
-        <input
-          className="w-full p-3 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          type="password"
-          placeholder="Confirm Password"
-          name="confirmPassword"
-          value={signUpData.confirmPassword}
-          onChange={handleChange}
-          required
-        />
-        {errors.confirmPassword && (
-          <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
-        )}
+          <div>
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-medium text-gray-900">
+              Confirm Password
+            </label>
+            <div className="mt-2">
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                placeholder="Confirm Password"
+                value={signUpData.confirmPassword}
+                onChange={handleChange}
+                required
+                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600 sm:text-sm"
+              />
+            </div>
+            {errors.confirmPassword && (
+              <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
+            )}
+          </div>
 
-        <div className="flex justify-between items-center mt-6">
-          <button
-            className="w-1/3 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
-            type="reset"
-            onClick={resetForm}
-          >
-            Cancel
-          </button>
+          <div className="flex justify-between items-center mt-6">
+            <button
+              className="w-1/3 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+              type="reset"
+              onClick={resetForm}>
+              Cancel
+            </button>
 
-          <button
-            className="w-1/3 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-            type="submit"
-            disabled={loading}
-          >
-            {loading ? "Signing Up..." : "Sign Up"}
-          </button>
-        </div>
-      </form>
+            <button
+              className="w-1/3 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
+              type="submit"
+              disabled={loading}>
+              {loading ? "Signing Up..." : "Sign Up"}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

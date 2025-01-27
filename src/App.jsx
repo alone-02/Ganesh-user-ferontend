@@ -26,6 +26,8 @@ import ContactUs from "./components/NavbarPages/ContactUs.jsx";
 import User from "./components/User/User.jsx";
 import SavedAddress from "./components/User/SavedAddress.jsx";
 import PersonelInfo from "./components/User/PersonelInfo.jsx";
+import PlaceOrderCart from "./components/Cart/PlaceOrderCart.jsx";
+import ForgotPassword from "./components/Authentication/ForgotPassword.jsx";
 
 function AppContent() {
   const location = useLocation();
@@ -44,6 +46,7 @@ function AppContent() {
           <Route path="/idoldetails/:pid" element={<Idoldetails />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot_password" element={<ForgotPassword />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/orders" element={<Order />} />
 
@@ -58,7 +61,7 @@ function AppContent() {
           <Route path="/add_address/:pid" element={<AddAddress />} />
           <Route path="/add_address" element={<AddAddress />} />
           <Route path="/place_order/:pid" element={<PlaceOrder />} />
-          <Route path="/place_order" element={<PlaceOrder />} />
+          <Route path="/place_order_cart" element={<PlaceOrderCart />} />
           <Route path="/custom" element={<CustomForm />} />
           <Route path="/about_us" element={<AboutUs />} />
           <Route path="/contact_us" element={<ContactUs />} />

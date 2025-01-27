@@ -77,7 +77,7 @@ function CheckAddress() {
 
   const handleContinue = () => {
     if(!pid){
-      return navigate(`/place_order`);
+      return navigate(`/place_order_cart`);
     }
     navigate(`/place_order/${pid}`);
   };

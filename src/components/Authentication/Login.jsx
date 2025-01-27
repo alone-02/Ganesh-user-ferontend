@@ -14,7 +14,7 @@ const apiUrl = import.meta.env.VITE_BACK_END_URL;
 function Login() {
   const [loading, setLoading] = useState(true);
 
-  useEffect (() => {
+  useEffect(() => {
     setTimeout(() => setLoading(false), 3000);
   }, []);
   const navigate = useNavigate();
@@ -84,13 +84,11 @@ function Login() {
         const { token, userId } = response.data;
 
         //console.log(userId);
-
         Cookies.set("authToken", token, { secure: true, sameSite: "Strict" });
         Cookies.set("userId", userId, { secure: true, sameSite: "Strict" });
 
         const userIdCookie = Cookies.get("userId");
         const authTokenCookie = Cookies.get("authToken");
-
         //console.log(userId);
 
         if (!userIdCookie || !authTokenCookie) {
@@ -99,7 +97,6 @@ function Login() {
         }
 
         setSignIn(true);
-
         navigate("/explore");
       }
     } catch (err) {
@@ -109,8 +106,6 @@ function Login() {
         alert("Something went wrong. Please try again.");
       }
       console.error("Error ", err.response.data.message);
-    } finally {
-      setLoadingButton(false);
     }
   };
 
@@ -119,54 +114,92 @@ function Login() {
       {loading ? (
         <LoadingSpinner />
       ) : (
-        <form
-          method="post"
-          action="./login"
-          onSubmit={login}
-          className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-          <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Log In</h2>
-          <div className="mb-4">
-            <input
-              className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              type="email"
-              name="email"
-              placeholder="Enter Email"
-              value={loginData.email}
-              onChange={dataInput}
-              required
-            />
-            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+        <>
+        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+          <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+            <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
+              Sign in to your account
+            </h2>
           </div>
 
-          <div className="mb-4">
-            <input
-              className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              type="password"
-              name="password"
-              placeholder="Enter Password"
-              value={loginData.password}
-              onChange={dataInput}
-              required
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">{errors.password}</p>
-            )}
-          </div>
-          <Link
-            to="/signup"
-            className="block text-blue-500 text-sm mb-4 text-center hover:underline">
-            Don't have an account? Sign up
-          </Link>
+          <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            <form action="./login" onSubmit={login} method="POST" className="space-y-6">
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm/6 font-medium text-gray-900">
+                  Email address
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={loginData.email}
+                    onChange={dataInput}
+                    required
+                    autoComplete="email"
+                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  />
+                  {errors.email && (
+                    <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                  )}
+                </div>
+              </div>
 
-          <button
-            className={`w-full p-3 rounded-md text-white ${
-              loadingButton ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-700"
-            }`}
-            type="submit"
-            disabled={loadingButton}>
-            {loadingButton ? "Logging In" : "Log In"}
-          </button>
-        </form>
+              <div>
+                <div className="flex items-center justify-between">
+                  <label
+                    htmlFor="password"
+                    className="block text-sm/6 font-medium text-gray-900">
+                    Password
+                  </label>
+                  <div className="text-sm">
+                    <Link
+                      to="/forgot_password"
+                      className="font-semibold text-indigo-600 hover:text-indigo-500">
+                      Forgot password?
+                    </Link>
+                  </div>
+                </div>
+                <div className="mt-2">
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    value={loginData.password}
+                    onChange={dataInput}
+                    required
+                    autoComplete="current-password"
+                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  />
+                  {errors.password && (
+                    <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <button
+                  type="submit"
+                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  disabled={loadingButton}>
+                  {loadingButton ? "Logging In" : "Log In"}
+                </button>
+              </div>
+            </form>
+
+            <p className="mt-10 text-center text-sm/6 text-gray-500">
+              Don't have an account?
+              <Link
+                to="/signup"
+                className="block text-blue-500 text-sm mb-4 text-center hover:underline">
+                Sign up
+              </Link>
+            </p>
+          </div>
+          </div>
+        </>
       )}
     </div>
   );

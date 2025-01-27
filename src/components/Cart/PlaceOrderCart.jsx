@@ -1,31 +1,25 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-import IdolList from "../Container/IdolCard";
-import CartItems from "./cartItems";
-import { Link, useNavigate } from "react-router-dom";
-import ErrorPage from "../404ErrorPage/ErrorPage";
 import LoadingSpinner from "../404ErrorPage/LoadingSpinner";
+import CartItems from "./cartItems";
+
 const apiUrl = import.meta.env.VITE_BACK_END_URL;
 
-function Cart() {
+const PlaceOrderCart = () => {
+  const { pid } = useParams();
   const navigate = useNavigate();
-  const [cart, setCart] = useState(null);
+    const [cart, setCart] = useState(null);
+  
 
+  const [idol, setIdol] = useState(null);
+  const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setTimeout(() => setLoading(false), 3000);
-  }, []);
+  const [error, setError] = useState(false);
 
   const userId = Cookies.get("userId");
   const authToken = Cookies.get("authToken");
-  //console.log("id :",userId, "token :",authToken);
-
-  if (!userId || !authToken) {
-    console.error("User is not authenticated. Missing token or userId.");
-    return <ErrorPage />;
-  }
 
   useEffect(() => {
     async function fetchCart() {
@@ -43,6 +37,7 @@ function Cart() {
         // console.log(response.data);
         if (response.status === 200) {
           setCart(response.data);
+          console.log(response.data)
         }
 
         //console.log("cart",cart.cartItems);
@@ -54,7 +49,7 @@ function Cart() {
   }, []);
 
   if (!cart) {
-    return <LoadingSpinner message="Loading idols......"/>;
+    return ;
   }
 
   if (cart.cartItems.length === 0) {
@@ -71,15 +66,34 @@ function Cart() {
     return subtotal + shippingCharge + taxCharge;
   };
 
-  const handleCheckout = () => {
-    navigate("/address");
+  const handleCheckout = async() => {
+    try {
+      const response = await axios.post(
+        `${apiUrl}/api/products/orders/place_order_cart`,
+        {
+          orderItem: cart.cartItems,
+          user: userId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+          credentials: "include",
+        }
+      );
+
+      if (response.status === 200) {
+        alert(response.data.message);
+        navigate(`/orders`);
+      }
+    } catch (err) {
+      console.error("Error placing order:", err);
+    }
   };
 ` `
   return (
     <div className="bg-gray-50 min-h-screen p-8">
-      {loading ? (
-        <LoadingSpinner />
-      ) : (
+      
         <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-lg p-6">
           <h1 className="text-2xl font-semibold border-b pb-4 mb-6">Shopping Cart</h1>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -127,13 +141,14 @@ function Cart() {
               <button
                 onClick={handleCheckout}
                 className="w-full bg-indigo-600 text-white py-2 rounded-md mt-4 hover:bg-indigo-700">
-                Checkout
+                Place Order
               </button>
             </div>
           </div>
         </div>
-      )}
+      
     </div>
   );
 }
-export default Cart;
+
+export default PlaceOrderCart;

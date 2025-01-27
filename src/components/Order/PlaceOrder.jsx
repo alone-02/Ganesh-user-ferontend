@@ -2,51 +2,49 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
+
 const apiUrl = import.meta.env.VITE_BACK_END_URL;
 
 const PlaceOrder = () => {
   const { pid } = useParams();
   const navigate = useNavigate();
 
-  const [idol, setIdol] = useState();
+  const [idol, setIdol] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const userId = Cookies.get("userId");
   const authToken = Cookies.get("authToken");
-  //console.log("id :",userId, "token :",authToken);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const response = await axios.get(`${apiUrl}/api/products/${pid}`);
-
         const { id, title, thumbnail, price } = response.data;
-        //console.log(title);
+
         setIdol({
-          id: id,
-          title: title,
+          id,
+          title,
           thumbnail: thumbnail.image_url,
-          price: price,
+          price,
         });
-        //console.log(idol);
       } catch (err) {
-        console.log(err);
+        console.error("Error fetching product details:", err);
+        setError(true);
+      } finally {
+        setLoading(false);
       }
     };
     fetchProduct();
   }, [pid]);
-
-  if (!idol) {
-    return <p>Loading idol details...</p>;
-  }
-
-  const { id, title, thumbnail, price } = idol;
 
   const placeToOrder = async (productId) => {
     try {
       const response = await axios.post(
         `${apiUrl}/api/products/orders/place_order`,
         {
-          orderItem: [{ productId: productId, quantity: 1 }],
+          orderItem: [{ productId, quantity }],
           user: userId,
         },
         {
@@ -58,82 +56,101 @@ const PlaceOrder = () => {
       );
 
       if (response.status === 200) {
-        console.log(response.data);
         alert(response.data.message);
         navigate(`/orders`);
       }
     } catch (err) {
-      console.log(err);
+      console.error("Error placing order:", err);
     }
   };
 
-  //console.log(idolId);
+  const handleQuantityChange = (newQuantity) => {
+    setQuantity(Number(newQuantity));
+  };
+
   const shipping = 5.0;
   const taxes = 5.52;
+  const total = idol ? idol.price * quantity + shipping + taxes : 0;
 
-  total = price + shipping + taxes;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <p className="text-gray-500 text-lg">Loading idol details...</p>
+      </div>
+    );
+  }
+
+  if (error || !idol) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <p className="text-red-500 text-lg">Failed to load idol details. Please try again later.</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <h2 className="text-xl font-bold mb-4">Order Summary</h2>
-      <div className="space-y-4">
-        <div key={idol.id} className="flex items-center border rounded-lg p-4 shadow-sm">
+    <div className="min-h-screen bg-gray-50 py-8 px-4">
+      <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">Order Summary</h2>
+        
+        {/* Product Details */}
+        <div className="flex items-center space-x-6 border-b pb-4 mb-4">
           <img
             src={idol.thumbnail}
             alt={idol.title}
-            className="w-16 h-16 object-cover rounded"
+            className="w-24 h-24 object-cover rounded-lg shadow"
           />
-          <div className="ml-4 flex-1">
-            <h3 className="font-medium">{idol.title}</h3>
-            <p className="text-sm text-gray-600">
-              {"orange"} • {"2ft"}
-            </p>
-            <p className="text-sm font-medium">${idol.price}</p>
-          </div>
-          <div className="flex items-center space-x-2">
-            <select
-              value={2}
-              onChange={(e) => handleQuantityChange(idol.id, e.target.value)}
-              className="border rounded p-1">
-              {[1, 2, 3, 4, 5].map((qty) => (
-                <option key={qty} value={qty}>
-                  {qty}
-                </option>
-              ))}
-            </select>
-            <button
-              onClick={() => handleRemoveItem(idol.id)}
-              className="text-red-500 hover:text-red-700">
-              Remove
-            </button>
+          <div className="flex-1">
+            <h3 className="text-lg font-medium text-gray-700">{idol.title}</h3>
+            <p className="text-sm text-gray-500">Price: ₹{idol.price}</p>
+            <div className="flex items-center mt-2 space-x-2">
+              <span className="text-sm text-gray-600">Quantity:</span>
+              <select
+                value={quantity}
+                onChange={(e) => handleQuantityChange(e.target.value)}
+                className="border rounded-md p-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                {[1, 2, 3, 4, 5].map((qty) => (
+                  <option key={qty} value={qty}>
+                    {qty}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
-        
-      </div>
-      <div className="mt-6 border-t pt-4 space-y-2">
-        <div className="flex justify-between">
-          <span className="text-gray-600">Subtotal</span>
-          <span>${price}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-gray-600">Shipping</span>
-          <span>${shipping.toFixed(2)}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-gray-600">Taxes</span>
-          <span>${taxes.toFixed(2)}</span>
-        </div>
-        <div className="flex justify-between font-bold text-lg">
-          <span>Total</span>
-          <span>${total}</span>
-        </div>
-      </div>
 
-      <button
-        onClick={() => placeToOrder(id)}
-        className="w-full bg-blue-600 text-white py-2 rounded-lg mt-4 hover:bg-blue-700">
-        Confirm order
-      </button>
+        {/* Pricing Details */}
+        <div className="space-y-4">
+          <div className="flex justify-between">
+            <span className="text-gray-600">Subtotal</span>
+            <span className="font-medium">₹{(idol.price * quantity).toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-gray-600">Shipping</span>
+            <span className="font-medium">₹{shipping.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-gray-600">Taxes</span>
+            <span className="font-medium">₹{taxes.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between border-t pt-4">
+            <span className="text-lg font-bold">Total</span>
+            <span className="text-lg font-bold">₹{total.toFixed(2)}</span>
+          </div>
+        </div>
+
+        {/* Buttons */}
+        <button
+          onClick={() => placeToOrder(idol.id)}
+          className="w-full bg-blue-600 text-white py-2 rounded-lg mt-6 text-lg font-medium hover:bg-blue-700 transition">
+          Confirm Order
+        </button>
+        <button
+          onClick={() => navigate(-1)}
+          className="w-full bg-gray-100 text-gray-700 py-2 rounded-lg mt-4 text-lg font-medium hover:bg-gray-200 transition">
+          Go Back
+        </button>
+      </div>
     </div>
   );
 };
