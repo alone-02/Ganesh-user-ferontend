@@ -1,25 +1,20 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { Link, useNavigate } from "react-router-dom";
-
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { AuthContext } from "../ContextApi/AuthContext";
-import Dialog from "../404ErrorPage/Dialog";
-import SigninPopUp from "../404ErrorPage/SigninPopUp";
 import LoadingSpinner from "../404ErrorPage/LoadingSpinner";
+import PopupDialog from "./PopupDialog";
+
 const apiUrl = import.meta.env.VITE_BACK_END_URL;
-//import "./login.css";
-//import LoginIcon from "@mui/icons-material/Login";
 
 function Login() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [loadingButton, setLoadingButton] = useState(false);
+  const [popup, setPopup] = useState({ open: false, message: "", type: "" });
 
-  useEffect(() => {
-    setTimeout(() => setLoading(false), 3000);
-  }, []);
   const navigate = useNavigate();
-
-  const { signIn, setSignIn } = useContext(AuthContext);
+  const { setSignIn } = useContext(AuthContext);
 
   const [loginData, setLoginData] = useState({
     email: "",
@@ -31,14 +26,9 @@ function Login() {
     password: "",
   });
 
-  const [loadingButton, setLoadingButton] = useState(false);
-
   function dataInput(event) {
     const { name, value } = event.target;
-    setLoginData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setLoginData((prevData) => ({ ...prevData, [name]: value }));
   }
 
   function validate() {
@@ -59,18 +49,18 @@ function Login() {
       setErrors({ email: emailError, password: passwordError });
       return false;
     }
+
     setErrors({ email: "", password: "" });
     return true;
   }
 
   const login = async (event) => {
     event.preventDefault();
+    if (!validate()) return;
 
-    if (!validate()) {
-      return;
-    }
-    //console.log("Login");
+    setLoadingButton(true);
     setLoading(true);
+
     try {
       const response = await axios.post(
         `${apiUrl}/api/users/login/authenticate`,
@@ -78,128 +68,110 @@ function Login() {
       );
 
       if (response.status === 200) {
-        // console.log("User Found");
-        alert(response.data.message);
+        setPopup({ open: true, message: "Login successful!", type: "success" });
 
         const { token, userId } = response.data;
-
-        //console.log(userId);
         Cookies.set("authToken", token, { secure: true, sameSite: "Strict" });
         Cookies.set("userId", userId, { secure: true, sameSite: "Strict" });
 
-        const userIdCookie = Cookies.get("userId");
-        const authTokenCookie = Cookies.get("authToken");
-        //console.log(userId);
-
-        if (!userIdCookie || !authTokenCookie) {
-          console.error("User is not authenticated. Missing token or userId.");
-          alert("Something went wrong. Please try again.");
+        if (!Cookies.get("userId") || !Cookies.get("authToken")) {
+          setPopup({
+            open: true,
+            message: "Something went wrong. Try again!",
+            type: "error",
+          });
+          return;
         }
 
         setSignIn(true);
-        navigate("/explore");
+        setTimeout(() => navigate("/explore"), 1500);
       }
     } catch (err) {
-      if (err.response && err.response.data.message) {
-        alert(err.response.data.message);
-      } else {
-        alert("Something went wrong. Please try again.");
-      }
-      console.error("Error ", err.response.data.message);
+      setPopup({
+        open: true,
+        message: err.response?.data?.message || "Something went wrong. Try again!",
+        type: "error",
+      });
+    } finally {
+      setLoading(false);
+      setLoadingButton(false);
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-indigo-600 to-blue-400">
       {loading ? (
         <LoadingSpinner />
       ) : (
-        <>
-        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-          <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-            <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-              Sign in to your account
-            </h2>
-          </div>
+        <div className="bg-white/10 backdrop-blur-lg shadow-lg rounded-lg p-8 max-w-md w-full text-white">
+          <h2 className="text-3xl font-bold text-center mb-6">Sign in to your account</h2>
 
-          <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form action="./login" onSubmit={login} method="POST" className="space-y-6">
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm/6 font-medium text-gray-900">
-                  Email address
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={loginData.email}
-                    onChange={dataInput}
-                    required
-                    autoComplete="email"
-                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                  />
-                  {errors.email && (
-                    <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-                  )}
-                </div>
-              </div>
+          <form onSubmit={login} className="space-y-5">
+            <div>
+              <label className="block text-sm font-medium text-white">
+                Email address
+              </label>
+              <input
+                name="email"
+                type="email"
+                value={loginData.email}
+                onChange={dataInput}
+                required
+                autoComplete="email"
+                className="w-full mt-2 p-3 rounded-lg bg-white/20 backdrop-blur-md text-white border border-white/30 placeholder-gray-300 focus:ring-2 focus:ring-blue-300 outline-none"
+                placeholder="Enter your email"
+              />
+              {errors.email && (
+                <p className="text-red-400 text-sm mt-1">{errors.email}</p>
+              )}
+            </div>
 
-              <div>
-                <div className="flex items-center justify-between">
-                  <label
-                    htmlFor="password"
-                    className="block text-sm/6 font-medium text-gray-900">
-                    Password
-                  </label>
-                  <div className="text-sm">
-                    <Link
-                      to="/forgot_password"
-                      className="font-semibold text-indigo-600 hover:text-indigo-500">
-                      Forgot password?
-                    </Link>
-                  </div>
-                </div>
-                <div className="mt-2">
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    value={loginData.password}
-                    onChange={dataInput}
-                    required
-                    autoComplete="current-password"
-                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                  />
-                  {errors.password && (
-                    <p className="text-red-500 text-sm mt-1">{errors.password}</p>
-                  )}
-                </div>
-              </div>
+            <div>
+              <label className="block text-sm font-medium text-white">Password</label>
+              <input
+                name="password"
+                type="password"
+                value={loginData.password}
+                onChange={dataInput}
+                required
+                autoComplete="current-password"
+                className="w-full mt-2 p-3 rounded-lg bg-white/20 backdrop-blur-md text-white border border-white/30 placeholder-gray-300 focus:ring-2 focus:ring-blue-300 outline-none"
+                placeholder="Enter your password"
+              />
+              {errors.password && (
+                <p className="text-red-400 text-sm mt-1">{errors.password}</p>
+              )}
+            </div>
 
-              <div>
-                <button
-                  type="submit"
-                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  disabled={loadingButton}>
-                  {loadingButton ? "Logging In" : "Log In"}
-                </button>
-              </div>
-            </form>
-
-            <p className="mt-10 text-center text-sm/6 text-gray-500">
-              Don't have an account?
-              <Link
-                to="/signup"
-                className="block text-blue-500 text-sm mb-4 text-center hover:underline">
-                Sign up
+            <div className="text-sm text-center">
+              <Link to="/forgot_password" className="text-blue-200 hover:underline">
+                Forgot password?
               </Link>
-            </p>
-          </div>
-          </div>
-        </>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-3 rounded-lg bg-blue-500 hover:bg-blue-600 transition-all duration-200 font-semibold text-white shadow-md disabled:opacity-50"
+              disabled={loadingButton}>
+              {loadingButton ? "Logging In..." : "Log In"}
+            </button>
+          </form>
+
+          <p className="mt-6 text-center text-sm text-white">
+            Don't have an account?{" "}
+            <Link to="/signup" className="text-blue-200 hover:underline">
+              Sign up
+            </Link>
+          </p>
+        </div>
+      )}
+
+      {popup.open && (
+        <PopupDialog
+          message={popup.message}
+          type={popup.type}
+          onClose={() => setPopup({ ...popup, open: false })}
+        />
       )}
     </div>
   );

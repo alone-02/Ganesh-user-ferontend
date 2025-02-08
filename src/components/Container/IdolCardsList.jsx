@@ -32,6 +32,7 @@ function IdolCardsList() {
                 id={idol._id}
                 title={idol.title}
                 thumbnail={idol.thumbnail?.image_url}
+                category={idol.category.name}
                 price={idol.price}
               />
             ))}

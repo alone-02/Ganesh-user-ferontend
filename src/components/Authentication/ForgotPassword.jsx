@@ -12,6 +12,7 @@ function ForgotPassword() {
     password: "",
     confirmPassword: "",
   });
+
   const [errors, setErrors] = useState({});
 
   const handleChange = (event) => {
@@ -53,32 +54,34 @@ function ForgotPassword() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
-    if (!validate()) return; 
-    setLoading(true); 
-  
+
+    if (!validate()) return;
+    setLoading(true);
+
     const { email, password } = signUpData;
-    const payload = { email, password }; 
-  
+    const payload = { email, password };
+
     try {
-      console.log("Request payload:", payload); 
-      const response = await axios.put(`${apiUrl}/api/users/login/resetPassword`, payload); 
-  
-      console.log("Server response:", response); 
+      console.log("Request payload:", payload);
+      const response = await axios.put(
+        `${apiUrl}/api/users/login/resetPassword`,
+        payload
+      );
+
+      console.log("Server response:", response);
       if (response.status === 200) {
         alert("Password updated successfully!");
-        navigate("/login"); 
+        navigate("/login");
       }
     } catch (err) {
       console.error("Error occurred:", err);
       const errorMessage =
         err.response?.data?.message || "Something went wrong. Please try again.";
-      alert(errorMessage); 
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }
   };
-  
 
   const resetForm = () => {
     setSignUpData({

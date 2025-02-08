@@ -21,16 +21,19 @@ function Order() {
   useEffect(() => {
     async function fetchOrders() {
       try {
-        const response = await axios.get(`${apiUrl}/api/products/orders/fetch_orders/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-          credentials: "include",
-        });
+        const response = await axios.get(
+          `${apiUrl}/api/products/orders/fetch_orders/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+            credentials: "include",
+          }
+        );
 
         if (response.status === 200) {
           setOrderDetails(response.data);
-          console.log(response.data);
+          console.log(response.data[0]);
         }
       } catch (err) {
         console.error("Error fetching orders:", err);
@@ -74,16 +77,12 @@ function Order() {
                 price={item.product.price}
                 quantity={item.quantity}
                 shipAddress={order.shipAddress}
+                reachDescription={item.product.reachDisciption}
               />
             ))}
 
             <div className="grid grid-cols-3 gap-6 mt-6">
-              <div>
-                <h4 className="font-semibold text-sm">Shipping Address</h4>
-                <p className="text-sm text-gray-700">{order.shipAddress}</p>
-                <p className="text-sm text-gray-700">{order.city}</p>
-                <p className="text-sm text-gray-700">{order.country}</p>
-              </div>
+              <div>Status: {order.status}</div>
 
               <div>
                 <h4 className="font-semibold text-sm">Payment Information</h4>

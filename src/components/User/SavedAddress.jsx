@@ -1,6 +1,7 @@
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 function SavedAddress({ address }) {
+  const navigate = useNavigate();
   const { profile } = useOutletContext();
   const handleEdit = () => {
     navigate(`/add_address`);

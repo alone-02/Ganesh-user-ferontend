@@ -3,7 +3,7 @@ import { IdolContext } from "../ContextApi/IdolContext";
 import { useNavigate } from "react-router-dom";
 //import "./content.css"
 
-function IdolCard({ id, thumbnail, title, price }) {
+function IdolCard({ id, thumbnail, title, category, price }) {
   const { setIdolId, setIdolList } = useContext(IdolContext);
 
   const navigate = useNavigate();
@@ -12,8 +12,8 @@ function IdolCard({ id, thumbnail, title, price }) {
     setIdolId({
       id: id,
       thumbnail: thumbnail,
-      title, 
-      price 
+      title,
+      price,
     });
     navigate(`/idoldetails/${id}`);
   };
@@ -34,7 +34,7 @@ function IdolCard({ id, thumbnail, title, price }) {
             {title}
           </h3>
 
-          <p className="mt-2 text-sm text-gray-500">Black</p>
+          <p className="mt-2 text-sm text-gray-500">{category}</p>
           <p className="font-bold text-lg text-gray-900">₹ {price}</p>
         </div>
       </div>

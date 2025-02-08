@@ -20,14 +20,11 @@ function User() {
 
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(
-          `${apiUrl}/api/users/login/userlist/${userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
+        const response = await axios.get(`${apiUrl}/api/users/login/userlist/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
         if (response.status === 200) {
           setProfile(response.data);
         }
@@ -49,15 +46,16 @@ function User() {
       <div className="w-1/4 bg-white shadow-lg p-6">
         <div className="mb-10">
           <h1 className="text-xl font-bold text-gray-800">Hello,</h1>
-          <h2 className="text-2xl font-semibold text-blue-600">{profile.name}</h2>
+          <h2 className="text-2xl font-semibold text-blue-600">
+            {profile.firstName + " " + profile.lastName}
+          </h2>
         </div>
         <nav>
           <ul className="space-y-6">
             <li>
               <Link
-                to="orders"
-                className="flex items-center space-x-3 text-gray-700 hover:text-blue-600"
-              >
+                to="/orders"
+                className="flex items-center space-x-3 text-gray-700 hover:text-blue-600">
                 <span>My Orders</span>
               </Link>
             </li>
@@ -83,7 +81,7 @@ function User() {
       {/* Main Content */}
       <div className="flex-grow p-10">
         <div className="bg-white shadow-lg rounded-lg p-8">
-          <Outlet context ={{ profile }}/>
+          <Outlet context={{ profile }} />
         </div>
       </div>
     </div>
