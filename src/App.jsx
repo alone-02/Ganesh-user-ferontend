@@ -6,7 +6,7 @@ import { AuthProvider } from "./components/ContextApi/AuthContext.jsx";
 
 //import Heading from "./components/Navbar/heading.jsx";
 import Navbar from "./components/Navbar/Navbar.jsx";
-import Home from "./components/Home/Home.jsx";
+import Home from "./components/Home/LandingPage.jsx";
 import Content from "./components/Container/IdolCardsList.jsx";
 import Login from "./components/Authentication/Login.jsx";
 import Signup from "./components/Authentication/Signup.jsx";
