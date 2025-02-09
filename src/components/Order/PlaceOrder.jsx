@@ -39,6 +39,13 @@ const PlaceOrder = () => {
     fetchProduct();
   }, [pid]);
 
+
+  const checkoutPayment=()=>{
+
+    
+
+  }
+
   const placeToOrder = async (productId) => {
     try {
       const response = await axios.post(
@@ -141,7 +148,7 @@ const PlaceOrder = () => {
 
         {/* Buttons */}
         <button
-          onClick={() => placeToOrder(idol.id)}
+          onClick={() => checkoutPayment(idol.id)}
           className="w-full bg-blue-600 text-white py-2 rounded-lg mt-6 text-lg font-medium hover:bg-blue-700 transition">
           Confirm Order
         </button>
