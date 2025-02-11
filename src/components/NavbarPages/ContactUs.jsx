@@ -27,17 +27,17 @@ const ContactUs = () => {
             <div className="space-y-4 text-gray-700">
               <p className="flex items-center gap-3 font-medium">
                 <FaMapMarkerAlt className="text-red-600" />
-                Shree Idol Booking, Near Bus Stand, Gadhinglaj, Maharashtra, India
+                Gadhinglaj, Maharashtra, India
               </p>
 
               <p className="flex items-center gap-3 font-medium">
                 <FaEnvelope className="text-blue-500" />
-                support@idolbooking.com
+                santoshbhaskal2127@gmail.com
               </p>
 
               <p className="flex items-center gap-3 font-medium">
                 <FaPhoneAlt className="text-green-600" />
-                +91-9876543210
+                +91-8805419693
               </p>
             </div>
 
