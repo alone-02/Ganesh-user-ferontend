@@ -28,6 +28,10 @@ import SavedAddress from "./components/User/SavedAddress.jsx";
 import PersonelInfo from "./components/User/PersonelInfo.jsx";
 import PlaceOrderCart from "./components/Cart/PlaceOrderCart.jsx";
 import ForgotPassword from "./components/Authentication/ForgotPassword.jsx";
+import TermsConditions from "./components/Policy/TermsConditions.jsx";
+import RefundPolicy from "./components/Policy/RefundPolicy.jsx";
+import ShippingPolicy from "./components/Policy/ShippingPolicy.jsx";
+import PaymentsPolicy from "./components/Policy/PaymentPolicy.jsx";
 
 function AppContent() {
   const location = useLocation();
@@ -62,9 +66,14 @@ function AppContent() {
           <Route path="/add_address" element={<AddAddress />} />
           <Route path="/place_order/:pid" element={<PlaceOrder />} />
           <Route path="/place_order_cart" element={<PlaceOrderCart />} />
+
           <Route path="/custom" element={<CustomForm />} />
           <Route path="/about_us" element={<AboutUs />} />
           <Route path="/contact_us" element={<ContactUs />} />
+          <Route path="/terms-and-conditions" element={<TermsConditions />} />
+          <Route path="/cancellation-refund-policy" element={<RefundPolicy />} />
+          <Route path="/shipping-policy" element={<ShippingPolicy />} />
+          <Route path="/payments-policy" element={<PaymentsPolicy />} />
         </Routes>
       </div>
       <Footer />

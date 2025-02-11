@@ -1,125 +1,179 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
+import {
+  MapPin,
+  Phone,
+  Mail,
+  Facebook,
+  Twitter,
+  Instagram,
+  Youtube,
+  Store,
+  Megaphone,
+  FileText,
+  Gift,
+  HelpCircle,
+} from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white py-12 px-4">
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start space-y-12 md:space-y-0">
-        {/* Brand Section */}
-        <div className="flex flex-col items-center md:items-start">
-          <h1 className="text-3xl font-bold">Shree Ganesh Museum</h1>
-          <p className="mt-4 text-gray-400 text-center md:text-left">
-            Celebrating the heritage and divinity of Lord Ganesha through art and culture.
-          </p>
-        </div>
-
-        {/* Links Section */}
-        <div className="flex flex-col md:flex-row space-y-8 md:space-y-0 md:space-x-16">
-          {/* Quick Links */}
+    <footer className="bg-[#172337] text-white py-10">
+      <div className="max-w-7xl mx-auto px-4">
+        {/* Footer Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-6 border-b border-gray-600 pb-6">
+          {/* About Section */}
           <div>
-            <h2 className="text-xl font-semibold mb-4">Quick Links</h2>
-            <ul className="space-y-2">
+            <h2 className="text-gray-300 font-semibold mb-4">ABOUT</h2>
+            <ul className="space-y-2 text-sm text-gray-400">
               <li>
-                <Link
-                  to="#home"
-                  className="text-gray-400 hover:text-indigo-400 transition-colors duration-200"
-                >
-                  Home
-                </Link>
+                <a href="#" className="hover:text-white">
+                  Contact Us
+                </a>
               </li>
               <li>
-                <Link
-                  to="#about"
-                  className="text-gray-400 hover:text-indigo-400 transition-colors duration-200"
-                >
+                <a href="#" className="hover:text-white">
                   About Us
-                </Link>
+                </a>
               </li>
               <li>
-                <Link
-                  to="#services"
-                  className="text-gray-400 hover:text-indigo-400 transition-colors duration-200"
-                >
-                  Services
-                </Link>
+                <a href="#" className="hover:text-white">
+                  Careers
+                </a>
               </li>
               <li>
-                <Link
-                  to="#contact"
-                  className="text-gray-400 hover:text-indigo-400 transition-colors duration-200"
-                >
-                  Contact
-                </Link>
+                <a href="#" className="hover:text-white">
+                  Press
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white">
+                  Corporate Information
+                </a>
               </li>
             </ul>
           </div>
 
-          {/* Resources */}
+          {/* Help Section */}
           <div>
-            <h2 className="text-xl font-semibold mb-4">Resources</h2>
-            <ul className="space-y-2">
+            <h2 className="text-gray-300 font-semibold mb-4">HELP</h2>
+            <ul className="space-y-2 text-sm text-gray-400">
               <li>
-                <Link
-                  to="#faq"
-                  className="text-gray-400 hover:text-indigo-400 transition-colors duration-200"
-                >
-                  FAQ
-                </Link>
+                <a href="/payments-policy" className="hover:text-white">
+                  Payments
+                </a>
               </li>
               <li>
-                <Link
-                  to="#support"
-                  className="text-gray-400 hover:text-indigo-400 transition-colors duration-200"
-                >
-                  Support
-                </Link>
+                <a href="/shipping-policy" className="hover:text-white">
+                  Shipping
+                </a>
+              </li>
+              <li>
+                <a href="/cancellation-refund-policy" className="hover:text-white">
+                  Cancellation & Returns
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white">
+                  FAQ
+                </a>
               </li>
             </ul>
           </div>
+
+          {/* Consumer Policy Section */}
+          <div>
+            <h2 className="text-gray-300 font-semibold mb-4">CONSUMER POLICY</h2>
+            <ul className="space-y-2 text-sm text-gray-400">
+              <li>
+                <a href="/cancellation-refund-policy" className="hover:text-white">
+                  Cancellation & Returns
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white">
+                  Terms Of Use
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white">
+                  Privacy
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white">
+                  Sitemap
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white">
+                  Grievance Redressal
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Address Section */}
+          <div>
+            <h2 className="text-gray-300 font-semibold mb-4">ADDRESS</h2>
+            <p className="flex items-center space-x-2 text-sm text-gray-400">
+              <MapPin size={18} className="text-gray-400" />
+              <span>Shree Ganesh Museum, Pune, India</span>
+            </p>
+          </div>
+
+          {/* Contact Section */}
+          <div>
+            <h2 className="text-gray-300 font-semibold mb-4">CONTACT</h2>
+            <p className="flex items-center space-x-2 text-sm text-gray-400">
+              <Phone size={18} className="text-gray-400" />
+              <span>+91 98765 43210</span>
+            </p>
+            <p className="flex items-center space-x-2 text-sm text-gray-400 mt-2">
+              <Mail size={18} className="text-gray-400" />
+              <span>support@ganeshmuseum.com</span>
+            </p>
+          </div>
         </div>
 
-        {/* Social Media Section */}
-        <div className="flex flex-col items-center md:items-start">
-          <h2 className="text-xl font-semibold mb-4">Follow Us</h2>
+        {/* Bottom Section */}
+        <div className="flex flex-col md:flex-row items-center justify-between text-gray-400 text-sm pt-6">
+          {/* Left Links */}
           <div className="flex space-x-6">
-            <a
-              href="https://facebook.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-indigo-400 transition-colors duration-200"
-              aria-label="Facebook"
-            >
-              <FaFacebook size={24} />
+            <a href="#" className="flex items-center space-x-2 hover:text-white">
+              <Store size={18} className="text-gray-400" />
+              <span>Become a Seller</span>
             </a>
+
             <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-indigo-400 transition-colors duration-200"
-              aria-label="Twitter"
-            >
-              <FaTwitter size={24} />
+              href="/terms-and-conditions"
+              className="flex items-center space-x-2 hover:text-white">
+              <FileText size={18} className="text-gray-400" />
+              <span>Terms & Conditions</span>
             </a>
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-indigo-400 transition-colors duration-200"
-              aria-label="Instagram"
-            >
-              <FaInstagram size={24} />
+            <a href="#" className="flex items-center space-x-2 hover:text-white">
+              <HelpCircle size={18} className="text-gray-400" />
+              <span>Help Center</span>
+            </a>
+          </div>
+
+          {/* Copyright */}
+          <p className="mt-4 md:mt-0">&copy; 2025 Shree Ganesh Museum</p>
+
+          {/* Social Icons */}
+          <div className="flex space-x-4 mt-4 md:mt-0">
+            <a href="#" className="text-gray-400 hover:text-white">
+              <Facebook size={22} />
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white">
+              <Twitter size={22} />
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white">
+              <Instagram size={22} />
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white">
+              <Youtube size={22} />
             </a>
           </div>
         </div>
-      </div>
-
-      {/* Footer Bottom Section */}
-      <div className="border-t border-gray-700 mt-12 pt-6 text-center text-gray-500">
-        <p>
-          &copy; {new Date().getFullYear()} Shree Ganesh Museum. All rights
-          reserved.
-        </p>
       </div>
     </footer>
   );

@@ -39,37 +39,37 @@ const PlaceOrder = () => {
     fetchProduct();
   }, [pid]);
 
-
-  const checkoutPayment=()=>{
-
+  const checkoutPayment = () => {
+   
     
 
-  }
+    };
 
-  const placeToOrder = async (productId) => {
-    try {
-      const response = await axios.post(
-        `${apiUrl}/api/products/orders/place_order`,
-        {
-          orderItem: [{ productId, quantity }],
-          user: userId,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
+    const placeToOrder = async () => {
+      try {
+        const response = await axios.post(
+          `${apiUrl}/api/products/orders/place_order`,
+          {
+            orderItem: [{ productId, quantity }],
+            user: userId,
           },
-          credentials: "include",
-        }
-      );
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+            credentials: "include",
+          }
+        );
 
-      if (response.status === 200) {
-        alert(response.data.message);
-        navigate(`/orders`);
+        if (response.status === 200) {
+          alert("Payment Successful! Order placed.");
+          navigate(`/orders`);
+        }
+      } catch (err) {
+        console.error("Error placing order:", err);
       }
-    } catch (err) {
-      console.error("Error placing order:", err);
-    }
-  };
+    };
+  
 
   const handleQuantityChange = (newQuantity) => {
     setQuantity(Number(newQuantity));
@@ -90,7 +90,9 @@ const PlaceOrder = () => {
   if (error || !idol) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <p className="text-red-500 text-lg">Failed to load idol details. Please try again later.</p>
+        <p className="text-red-500 text-lg">
+          Failed to load idol details. Please try again later.
+        </p>
       </div>
     );
   }
@@ -99,7 +101,7 @@ const PlaceOrder = () => {
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">Order Summary</h2>
-        
+
         {/* Product Details */}
         <div className="flex items-center space-x-6 border-b pb-4 mb-4">
           <img
