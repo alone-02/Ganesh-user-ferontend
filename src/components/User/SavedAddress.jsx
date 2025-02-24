@@ -1,12 +1,25 @@
 import { useNavigate, useOutletContext } from "react-router-dom";
+import AddAddress from "../Address/AddAddress";
+import { useEffect } from "react";
 
-function SavedAddress({ address }) {
+function SavedAddress() {
   const navigate = useNavigate();
   const { profile } = useOutletContext();
+
+  useEffect(() => {
+    if (!profile.address) {
+      // navigate("/add_address");
+    }
+  }, [profile.address, navigate]);
+
+  if (!profile.address) {
+    return <AddAddress />;
+  }
+
   const handleEdit = () => {
-    navigate(`/add_address`);
+    navigate(`/profile/add_address`);
   };
-  console.log(address);
+
   return (
     <div className="border rounded-lg">
       <div className="flex justify-between items-center bg-blue-100 px-6 py-4 border-b">
@@ -22,7 +35,9 @@ function SavedAddress({ address }) {
       <div className="p-6 space-y-6">
         <div>
           <span className="block font-medium text-gray-700">Name:</span>
-          <p className="text-gray-600">{profile.address.firstName + " " + profile.address.lastName}</p>
+          <p className="text-gray-600">
+            {profile.address.firstName + " " + profile.address.lastName}
+          </p>
         </div>
         <div>
           <span className="block font-medium text-gray-700">Email:</span>

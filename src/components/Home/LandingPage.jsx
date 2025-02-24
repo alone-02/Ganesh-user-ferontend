@@ -1,75 +1,94 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { IdolContext } from "../ContextApi/IdolContext";
+import IdolCard from "../Container/IdolCard";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
 
-function Home () {
- 
+function Home() {
+  const { idolList } = useContext(IdolContext);
+
+  const slides = [
+    {
+      image: "Hero.jpeg",
+      title: "Welcome to the Ganesh Museum",
+      description: "Discover the Rich Culture and Heritage of Lord Ganesh",
+    },
+    {
+      image: "idol1.webp",
+      title: "Explore the Artistic Heritage",
+      description: "Marvel at centuries of intricate idol craftsmanship",
+    },
+    {
+      image: "idol2.jpg",
+      title: "Celebrate Ganesh Chaturthi",
+      description: "Join the grand festival of devotion and art",
+    },
+  ];
+
   return (
     <div>
-      <section
-        className="bg-cover bg-center h-screen"
-        style={{ backgroundImage: "url('Hero.jpeg')" }}
-      >
-        <div className="flex items-center justify-center h-full bg-black bg-opacity-50">
-          <div className="text-center text-white">
-            <h1 className="text-5xl font-bold">Welcome to the Ganesh Museum</h1>
-            <p className="mt-4 text-lg">
-              Discover the Rich Culture and Heritage of Lord Ganesh
-            </p>
-            <Link
-              to="/explore"
-              className="mt-6 inline-block px-6 py-3 bg-orange-500 text-white rounded-lg"
-            >
-              Explore Now
-            </Link>
-          </div>
-        </div>
-      </section>
+      <Swiper
+        modules={[Navigation, Pagination, Autoplay]}
+        navigation
+        pagination={{ clickable: true }}
+        autoplay={{ delay: 4000, disableOnInteraction: false }}
+        loop={true}
+        className="h-screen">
+        {slides.map((slide, index) => (
+          <SwiperSlide key={index}>
+            <section
+              className="relative bg-cover bg-center h-screen flex items-center justify-center"
+              style={{ backgroundImage: `url(${slide.image})` }}>
+              <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+              <div className="relative text-center text-white px-6">
+                <h1 className="text-5xl md:text-6xl font-bold drop-shadow-lg">
+                  {slide.title}
+                </h1>
+                <p className="mt-4 text-lg md:text-xl drop-shadow-md">
+                  {slide.description}
+                </p>
+                <Link
+                  to="/explore"
+                  className="mt-6 inline-block px-8 py-3 bg-orange-500 text-white text-lg font-semibold rounded-lg transition duration-300 hover:bg-orange-600">
+                  Explore Now
+                </Link>
+              </div>
+            </section>
+          </SwiperSlide>
+        ))}
+      </Swiper>
 
       <section className="py-10 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-semibold text-center mb-8">Our Idols</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="card bg-white shadow-lg rounded-lg overflow-hidden">
-              <img
-                src="idol1.webp"
-                alt="Card 1"
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-semibold">Ganesh 1</h3>
-                <p className="mt-2 text-gray-600">
-                  Description for the first card. This can be a brief overview.
-                </p>
+            {idolList?.slice(0, 3).map((idol) => (
+              <div
+                key={idol.id}
+                className="card bg-white shadow-lg rounded-lg overflow-hidden">
+                <img
+                  src={idol.thumbnail?.image_url}
+                  alt={idol.title}
+                  className="w-full h-96 object-cover"
+                />
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold">{idol.title}</h3>
+                  <p className="mt-2 text-gray-600">
+                    {idol.reachDisciption.split(" ").slice(0, 20).join(" ")}...
+                  </p>
+                </div>
               </div>
-            </div>
+            ))}
+          </div>
 
-            <div className="card bg-white shadow-lg rounded-lg overflow-hidden">
-              <img
-                src="idol2.jpg"
-                alt="Card 2"
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-semibold">Ganesh 2</h3>
-                <p className="mt-2 text-gray-600">
-                  Description for the second card. Highlight some features here.
-                </p>
-              </div>
-            </div>
-
-            <div className="card bg-white shadow-lg rounded-lg overflow-hidden">
-              <img
-                src="idol3.webp"
-                alt="Card 3"
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-semibold">Ganesh 3</h3>
-                <p className="mt-2 text-gray-600">
-                  Description for the third card. Encourage action here.
-                </p>
-              </div>
-            </div>
+          {/* See More Button */}
+          <div className="text-center mt-8">
+            <Link
+              to="/explore"
+              className="inline-block px-6 py-3 bg-orange-500 text-white rounded-lg">
+              See More
+            </Link>
           </div>
         </div>
       </section>
@@ -81,11 +100,10 @@ function Home () {
             <div className="bg-white p-6 rounded-lg shadow-lg">
               <h3 className="text-xl font-semibold">The Origins of Ganesh</h3>
               <p className="mt-2 text-gray-600">
-                Ganesh, created by Goddess Parvati and later given an elephant
-                head by Lord Shiva, symbolizes wisdom and strength. Revered as
-                the ‘Remover of Obstacles,’ he is worshipped before new
-                beginnings. His influence extends beyond India, with cultural
-                adaptations in Thailand, Nepal, and more.
+                Ganesh, created by Goddess Parvati and later given an elephant head by
+                Lord Shiva, symbolizes wisdom and strength. Revered as the ‘Remover of
+                Obstacles,’ he is worshipped before new beginnings. His influence extends
+                beyond India, with cultural adaptations in Thailand, Nepal, and more.
               </p>
             </div>
 
@@ -94,31 +112,28 @@ function Home () {
                 Artistic Representations of Ganesh
               </h3>
               <p className="mt-2 text-gray-600">
-                Ganesh is depicted in various forms, from traditional Indian
-                statues to contemporary art. Each piece reflects unique
-                symbolism, such as his elephant head for wisdom and his multiple
-                arms for power. His imagery varies globally, with styles
-                influenced by local cultures in Nepal, Thailand, and beyond.
+                Ganesh is depicted in various forms, from traditional Indian statues to
+                contemporary art. Each piece reflects unique symbolism, such as his
+                elephant head for wisdom and his multiple arms for power. His imagery
+                varies globally, with styles influenced by local cultures in Nepal,
+                Thailand, and beyond.
               </p>
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h3 className="text-xl font-semibold">
-                Festivals Celebrating Ganesh
-              </h3>
+              <h3 className="text-xl font-semibold">Festivals Celebrating Ganesh</h3>
               <p className="mt-2 text-gray-600">
-                The grand festival of Ganesh Chaturthi celebrates Ganesh’s birth
-                with vibrant processions, music, and dancing. Devotees create
-                elaborate clay idols of Ganesh, which are immersed in water to
-                symbolize renewal. Celebrations span India and other regions,
-                showcasing diverse cultural traditions and reverence for Ganesh.
+                The grand festival of Ganesh Chaturthi celebrates Ganesh’s birth with
+                vibrant processions, music, and dancing. Devotees create elaborate clay
+                idols of Ganesh, which are immersed in water to symbolize renewal.
+                Celebrations span India and other regions, showcasing diverse cultural
+                traditions and reverence for Ganesh.
               </p>
             </div>
           </div>
           <Link
             href="#all-exhibits"
-            className="mt-6 inline-block px-6 py-3 bg-orange-500 text-white rounded-lg"
-          >
+            className="mt-6 inline-block px-6 py-3 bg-orange-500 text-white rounded-lg">
             View All Exhibits
           </Link>
         </div>
@@ -138,8 +153,7 @@ function Home () {
           </p>
           <Link
             href="#plan-your-visit"
-            className="mt-6 inline-block px-6 py-3 bg-orange-500 text-white rounded-lg"
-          >
+            className="mt-6 inline-block px-6 py-3 bg-orange-500 text-white rounded-lg">
             Plan Your Visit
           </Link>
         </div>
@@ -149,9 +163,7 @@ function Home () {
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-semibold">Upcoming Events</h2>
           <div className="mt-10">
-            <h3 className="text-xl font-semibold">
-              Ganesh Chaturthi Celebration
-            </h3>
+            <h3 className="text-xl font-semibold">Ganesh Chaturthi Celebration</h3>
             <p>Date and Details</p>
             <h3 className="text-xl font-semibold mt-4">
               Art Workshop: Crafting Ganesh Statues
@@ -159,8 +171,7 @@ function Home () {
             <p>Date and Details</p>
             <Link
               href="#all-events"
-              className="mt-6 inline-block px-6 py-3 bg-orange-500 text-white rounded-lg"
-            >
+              className="mt-6 inline-block px-6 py-3 bg-orange-500 text-white rounded-lg">
               See All Events
             </Link>
           </div>
@@ -172,8 +183,7 @@ function Home () {
           <h2 className="text-3xl font-semibold">Testimonials</h2>
           <div className="mt-10">
             <p className="italic">
-              “A beautiful tribute to Lord Ganesh! The exhibits are
-              enlightening.”
+              “A beautiful tribute to Lord Ganesh! The exhibits are enlightening.”
             </p>
             <p className="italic mt-4">
               “A must-visit for anyone interested in culture and art!”
@@ -202,6 +212,6 @@ function Home () {
       </section>
     </div>
   );
-};
+}
 
 export default Home;

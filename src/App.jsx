@@ -17,8 +17,8 @@ import Footer from "./components/Footer/Footer.jsx";
 //import Sidebar from "./components/Navbar/Sidebar.jsx";
 import "./index.css";
 //import UserProfile from "./components/User/UserProfile.jsx";
-import AddAddress from "./components/Order/AddAddress.jsx";
-import CheckAddress from "./components/Order/CheckAddress.jsx";
+import AddAddress from "./components/Address/AddAddress.jsx";
+import CheckAddress from "./components/Address/CheckAddress.jsx";
 import PlaceOrder from "./components/Order/PlaceOrder.jsx";
 import CustomForm from "./components/CustomForm/CustomForm.jsx";
 import AboutUs from "./components/NavbarPages/AboutUs.jsx";
@@ -64,6 +64,7 @@ function AppContent() {
           <Route path="/address" element={<CheckAddress />} />
           <Route path="/add_address/:pid" element={<AddAddress />} />
           <Route path="/add_address" element={<AddAddress />} />
+          <Route path="/profile/add_address" element={<AddAddress />} />
           <Route path="/place_order/:pid" element={<PlaceOrder />} />
           <Route path="/place_order_cart" element={<PlaceOrderCart />} />
 

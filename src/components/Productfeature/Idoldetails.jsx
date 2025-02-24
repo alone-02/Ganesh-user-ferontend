@@ -5,10 +5,18 @@ import Cookies from "js-cookie";
 import { IdolContext } from "../ContextApi/IdolContext";
 import LoadingSpinner from "../404ErrorPage/LoadingSpinner";
 import { ShoppingCart, Heart, Minus, Plus } from "lucide-react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { Navigation, Pagination } from "swiper/modules";
+import AlertBox from "../404ErrorPage/AlertBox";
+import ErrorPage from "../404ErrorPage/ErrorPage";
 
 const apiUrl = import.meta.env.VITE_BACK_END_URL;
 
 function Idoldetails() {
+  const [alert, setAlert] = useState(null);
   const navigate = useNavigate();
   const { pid } = useParams();
   const { idolList } = useContext(IdolContext);
@@ -26,7 +34,10 @@ function Idoldetails() {
       setLoading(true);
       try {
         const response = await axios.get(`${apiUrl}/api/products/${pid}`);
-        setIdol(response.data);
+        if (response.status === 200) {
+          setIdol(response.data);
+        }
+
         setImageSrc(response.data.thumbnail?.image_url || "fallback-image.jpg");
       } catch (err) {
         console.error("Error fetching idol details:", err);
@@ -41,9 +52,13 @@ function Idoldetails() {
 
   const addToCart = async (productId) => {
     if (!userId || !authToken) {
-      alert("Please Sign In");
-      navigate(`/login`);
-      return;
+      setAlert({
+        type: "error",
+        title: "Oops!",
+        message: "Please Sign In",
+      });
+      //alert("Please Sign In");
+      return navigate(`/login`);
     }
     try {
       const response = await axios.post(
@@ -51,8 +66,21 @@ function Idoldetails() {
         { cartItem: { productId, quantity }, user: userId },
         { headers: { Authorization: `Bearer ${authToken}` } }
       );
-      alert(response.data.message);
+      setAlert({
+        type: "success",
+        title: "Successful!",
+        message: response.data.message,
+      });
+      // alert(response.data.message);
     } catch (err) {
+      setAlert({
+        type: "error",
+        title: "Oops!",
+        message:
+          err.response?.data?.message ||
+          err.message ||
+          "Something went wrong. Try again!",
+      });
       console.error("Error adding to cart:", err.response?.data?.message || err.message);
     }
   };
@@ -67,19 +95,23 @@ function Idoldetails() {
 
   if (loading) return <LoadingSpinner />;
   if (error || !idol) {
-    return (
-      <div className="text-center py-8">
-        <p className="text-red-500 text-lg">
-          Failed to load idol details. Please try again later.
-        </p>
-      </div>
-    );
+    return <ErrorPage />;
   }
 
   const { id, title, category, size, reachDisciption, price } = idol;
 
   return (
     <div className="flex flex-col items-center space-y-6 px-6 py-8 bg-gray-50 min-h-screen">
+      {alert && (
+        <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 z-[1000]">
+          <AlertBox
+            type={alert.type}
+            title={alert.title}
+            message={alert.message}
+            onClick={() => setAlert(null)}
+          />
+        </div>
+      )}
       <div className="flex flex-col md:flex-row bg-white rounded-lg shadow-lg p-8 w-full max-w-6xl">
         <div className="w-full md:w-1/2 flex justify-center">
           <img
@@ -140,27 +172,39 @@ function Idoldetails() {
         </div>
       </div>
 
+      {/* Similar Idols with Swiper Slider */}
       <div className="w-full max-w-6xl px-4">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Similar Idols</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">You may also like</h2>
+        <Swiper
+          modules={[Navigation, Pagination]}
+          spaceBetween={20}
+          slidesPerView={1}
+          breakpoints={{
+            640: { slidesPerView: 2 },
+            768: { slidesPerView: 3 },
+            1024: { slidesPerView: 4 },
+          }}
+          navigation
+          pagination={{ clickable: true }}>
           {idolList?.map((idol) => (
-            <div
-              key={idol.id}
-              className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition"
-              onClick={() => featureIdol(idol.id)}>
-              <img
-                src={idol.thumbnail?.image_url || "fallback-image.jpg"}
-                alt={idol.title}
-                className="w-full h-48 object-cover cursor-pointer transform hover:scale-105 transition duration-300"
-                loading="lazy"
-              />
-              <div className="p-4 text-center">
-                <h3 className="text-lg font-semibold text-gray-800">{idol.title}</h3>
-                <p className="text-gray-600 text-sm">₹{idol.price}</p>
+            <SwiperSlide key={idol.id}>
+              <div
+                className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition"
+                onClick={() => featureIdol(idol.id)}>
+                <img
+                  src={idol.thumbnail?.image_url || "fallback-image.jpg"}
+                  alt={idol.title}
+                  className="w-full h-80 object-cover cursor-pointer transform hover:scale-105 transition duration-300"
+                  loading="lazy"
+                />
+                <div className="p-4 text-center">
+                  <h3 className="text-lg font-semibold text-gray-800">{idol.title}</h3>
+                  <p className="text-gray-600 text-sm">₹{idol.price}</p>
+                </div>
               </div>
-            </div>
+            </SwiperSlide>
           ))}
-        </div>
+        </Swiper>
       </div>
     </div>
   );

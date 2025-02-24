@@ -14,15 +14,16 @@ function PersonalInfo() {
 
   return (
     <div className="flex-grow p-8 flex justify-center">
-      <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-2xl">
+      <div className="bg-white rounded-xl p-8 w-full max-w-2xl">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-semibold text-gray-800">Personal Information</h2>
           <button
             className={`flex items-center px-4 py-2 rounded-lg ${
-              isEditing ? "bg-green-500 hover:bg-green-600" : "bg-blue-500 hover:bg-blue-600"
+              isEditing
+                ? "bg-green-500 hover:bg-green-600"
+                : "bg-blue-500 hover:bg-blue-600"
             } text-white transition duration-300`}
-            onClick={() => setIsEditing(!isEditing)}
-          >
+            onClick={() => setIsEditing(!isEditing)}>
             {isEditing ? <SaveIcon className="mr-2" /> : <EditIcon className="mr-2" />}
             {isEditing ? "Save" : "Edit"}
           </button>
@@ -32,7 +33,9 @@ function PersonalInfo() {
           {/* First and Last Name */}
           <div className="flex space-x-4">
             <div className="w-1/2">
-              <label className="block text-gray-600 text-sm font-medium mb-1">First Name</label>
+              <label className="block text-gray-600 text-sm font-medium mb-1">
+                First Name
+              </label>
               <input
                 type="text"
                 name="firstName"
@@ -43,7 +46,9 @@ function PersonalInfo() {
               />
             </div>
             <div className="w-1/2">
-              <label className="block text-gray-600 text-sm font-medium mb-1">Last Name</label>
+              <label className="block text-gray-600 text-sm font-medium mb-1">
+                Last Name
+              </label>
               <input
                 type="text"
                 name="lastName"
@@ -88,7 +93,9 @@ function PersonalInfo() {
 
           {/* Email Address */}
           <div>
-            <label className="block text-gray-600 text-sm font-medium mb-1">Email Address</label>
+            <label className="block text-gray-600 text-sm font-medium mb-1">
+              Email Address
+            </label>
             <input
               type="email"
               name="email"
@@ -101,7 +108,9 @@ function PersonalInfo() {
 
           {/* Mobile Number */}
           <div>
-            <label className="block text-gray-600 text-sm font-medium mb-1">Mobile Number</label>
+            <label className="block text-gray-600 text-sm font-medium mb-1">
+              Mobile Number
+            </label>
             <input
               type="text"
               name="phone"

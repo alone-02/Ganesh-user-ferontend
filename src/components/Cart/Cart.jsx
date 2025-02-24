@@ -96,7 +96,7 @@ function Cart() {
     }
   };
 
-  if (!cart) return <LoadingSpinner message="Loading idols..." />;
+  if (!cart) return <EmptyCart />;
   if (cart.cartItems.length === 0) return <EmptyCart />;
 
   const shippingCharge = 10.0;

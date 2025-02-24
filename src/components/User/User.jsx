@@ -19,6 +19,7 @@ function User() {
     }
 
     const fetchProfile = async () => {
+      console.log(userId);
       try {
         const response = await axios.get(`${apiUrl}/api/users/login/userlist/${userId}`, {
           headers: {

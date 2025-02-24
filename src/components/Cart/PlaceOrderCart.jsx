@@ -93,7 +93,7 @@ const PlaceOrderCart = () => {
   return (
     <div className="bg-gray-50 min-h-screen p-8">
       <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-lg p-6">
-        <h1 className="text-2xl font-semibold border-b pb-4 mb-6">Shopping Cart</h1>
+        <h1 className="text-2xl font-semibold border-b pb-4 mb-6">Order Summary</h1>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 rounded-lg ">
             {cart.cartItems.map((item) => (

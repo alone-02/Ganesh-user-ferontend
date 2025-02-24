@@ -13,6 +13,7 @@ const PlaceOrder = () => {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [orderLoading, setOrderLoading] = useState(false); // State for button loading
 
   const userId = Cookies.get("userId");
   const authToken = Cookies.get("authToken");
@@ -39,37 +40,35 @@ const PlaceOrder = () => {
     fetchProduct();
   }, [pid]);
 
-  const checkoutPayment = () => {
-   
-    
+  const checkoutPayment = async (productId) => {
+    setOrderLoading(true); // Start loading
 
-    };
-
-    const placeToOrder = async () => {
-      try {
-        const response = await axios.post(
-          `${apiUrl}/api/products/orders/place_order`,
-          {
-            orderItem: [{ productId, quantity }],
-            user: userId,
+    try {
+      const response = await axios.post(
+        `${apiUrl}/api/products/orders/place_order`,
+        {
+          orderItem: [{ productId, quantity }],
+          user: userId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
           },
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-            credentials: "include",
-          }
-        );
-
-        if (response.status === 200) {
-          alert("Payment Successful! Order placed.");
-          navigate(`/orders`);
+          credentials: "include",
         }
-      } catch (err) {
-        console.error("Error placing order:", err);
+      );
+
+      if (response.status === 200) {
+        alert("Payment Successful! Order placed.");
+        navigate(`/orders`);
       }
-    };
-  
+    } catch (err) {
+      console.error("Error placing order:", err);
+      alert("Failed to place order. Please try again.");
+    } finally {
+      setOrderLoading(false); // Stop loading
+    }
+  };
 
   const handleQuantityChange = (newQuantity) => {
     setQuantity(Number(newQuantity));
@@ -151,9 +150,36 @@ const PlaceOrder = () => {
         {/* Buttons */}
         <button
           onClick={() => checkoutPayment(idol.id)}
-          className="w-full bg-blue-600 text-white py-2 rounded-lg mt-6 text-lg font-medium hover:bg-blue-700 transition">
-          Confirm Order
+          disabled={orderLoading}
+          className={`w-full py-2 rounded-lg mt-6 text-lg font-medium transition ${
+            orderLoading
+              ? "bg-blue-400 text-white cursor-not-allowed"
+              : "bg-blue-600 text-white hover:bg-blue-700"
+          }`}>
+          {orderLoading ? (
+            <div className="flex items-center justify-center">
+              <svg
+                className="animate-spin h-5 w-5 mr-2 text-white"
+                viewBox="0 0 24 24">
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v8z"></path>
+              </svg>
+              Placing Order...
+            </div>
+          ) : (
+            "Confirm Order"
+          )}
         </button>
+
         <button
           onClick={() => navigate(-1)}
           className="w-full bg-gray-100 text-gray-700 py-2 rounded-lg mt-4 text-lg font-medium hover:bg-gray-200 transition">
